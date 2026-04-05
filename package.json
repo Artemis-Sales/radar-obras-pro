@@ -1,0 +1,39 @@
+{
+  "name": "radar-obras-pro",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "prebuild": "node -e \"const fs = require('fs'); if(fs.existsSync('.env.local')) fs.copyFileSync('.env.local', '.env');\"",
+    "prebuild:prod": "node -e \"const fs = require('fs'); if(fs.existsSync('.env.production')) fs.copyFileSync('.env.production', '.env');\"",
+    "build": "next build",
+    "build:firebase": "npm run prebuild:prod && firebase deploy --only hosting",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@google/generative-ai": "^0.24.1",
+    "@vis.gl/react-google-maps": "^1.7.1",
+    "dotenv": "^17.3.1",
+    "firebase": "^12.11.0",
+    "firebase-admin": "^13.7.0",
+    "lucide-react": "^1.7.0",
+    "next": "16.2.1",
+    "puppeteer": "^24.40.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
