@@ -12,7 +12,7 @@ async function runMaestro() {
   // Motivo arquitetural (Estabilidade do Cron): Se um dos robôs Puppeteer travar o navegador
   // Chrome por falta de memória ou crashar a página, o processo filho morre, mas o Maestro sobrevive.
   const scrapers = [
-    { name: 'Motor CETESB (Licenças Prévias e Instalação)', path: 'node scripts/scraper.mjs' },
+    { name: 'Motor CETESB (Licenças Prévias e Instalação)', path: 'node scripts/scraper-cetesb.mjs' },
     { name: 'Motor Diário Oficial SP (GRAPROHAB)', path: 'node scripts/scraper-doe.mjs' },
     { name: 'Motor Prefeitura SP (Alvarás Municipais)', path: 'node scripts/scraper-prefeitura.mjs' }
   ];

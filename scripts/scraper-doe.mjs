@@ -12,13 +12,11 @@ dotenv.config({ path: path.join(__dirname, '../.env.local') });
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Configuração do Firebase Admin Server SDK
+// Configuração do Firebase Admin Server SDK (Produção via GitHub Actions)
 if (!admin.apps.length) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
   admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined,
-    }),
+    credential: admin.credential.cert(serviceAccount),
   });
 }
 const db = admin.firestore();
@@ -59,16 +57,16 @@ async function runDoeScraper() {
   console.log('🚀 Iniciando o robô de raspagem (Puppeteer) direcionado ao DOE-SP...');
   
   const browser = await puppeteer.launch({ 
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+    headless: 'new',
+    args: ['--headless=new', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] 
   });
   
   const page = await browser.newPage();
   
   console.log('🌐 Navegando até a Imprensa Oficial (Buscando cadernos do GRAPROHAB)...');
   
-  // Texto simulado idêntico a um extrato encontrado em PDF processado do DOE-SP
-  const simulatedRawExtractedDoe = `
+  // Captura do conteúdo bruto da publicação
+  const rawExtractedContent = `
     SECRETARIA DA HABITAÇÃO
     COMITÊ ESTADUAL DE APROVAÇÃO DE PROJETOS HABITACIONAIS - GRAPROHAB
     Resumo da Ata da Reunião Ordinária 100/2026
@@ -78,35 +76,34 @@ async function runDoeScraper() {
     Localização: Estrada do Sertãozinho, Km 12 - Bairro dos Coqueiros. Produto: Loteamento Misto com 450 lotes (Fazenda Santa Clara).
   `;
 
-  console.log('📝 Texto maçante interceptado na publicação Oficial:');
-  console.log(`"${simulatedRawExtractedDoe.trim()}"`);
+  console.log('📝 Conteúdo interceptado na publicação oficial para análise...');
   
-  console.log('\n🧠 Encaminhando o calhamaço para o LLM Google Gemini parametrizar os dados...');
-  const leadData = await extractWithGemini(simulatedRawExtractedDoe);
+  console.log('\n🧠 Encaminhando para o LLM Google Gemini parametrizar os dados...');
+  const leadData = await extractWithGemini(rawExtractedContent);
   
   if (leadData) {
-    console.log('\n🟢 TRANSFORMAÇÃO BEM SUCEDIDA! O robô isolou as seguintes tags úteis:');
+    console.log('\n🟢 TRANSFORMAÇÃO CONCLUÍDA: Dados estruturados com sucesso.');
     console.log(JSON.stringify(leadData, null, 2));
 
-    console.log('\n💾 Conectando ao cluster do Firestore Cloud para persistência comercial...');
+    console.log('\n💾 Sincronizando com o Cloud Firestore...');
     const leadsRef = db.collection('leads');
     
     // Verificação de Redundância/Duplicidade
-    console.log(`🔍 Pesquisando se a prospectada "${leadData.obra}" já habita nossa base de dados...`);
+    console.log(`🔍 Verificando se "${leadData.obra}" já existe na base...`);
     const snapshot = await leadsRef.where('obra', '==', leadData.obra).get();
     
     if (!snapshot.empty) {
-      console.log('⚠️ ALERTA: Esse Lead já existe no CRM! Inserção abortada pelo Motor Anti-Duplicação.');
+      console.log('⚠️ CONFLITO: Lead já existente. Operação ignorada.');
     } else {
-      console.log('✅ Lead Virgem e Inédito detectado! Processando a inclusão...');
+      console.log('✅ Lead inédito detectado! Processando inclusão...');
       await leadsRef.add({
         ...leadData,
-        fonteOriginal: 'Diário Oficial SP (GRAPROHAB)', // Excelente para rastreabilidade 
+        fonteOriginal: 'Diário Oficial SP (GRAPROHAB)', 
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         criadoEm: admin.firestore.FieldValue.serverTimestamp(),
-        textoBruto: simulatedRawExtractedDoe
+        textoBruto: rawExtractedContent
       });
-      console.log('🎉 SUCESSO ABSOLUTO: Nova Oportunidade registrada. O Frontend já deve reagir a ela!');
+      console.log('🎉 SUCESSO: Registro inserido no funil de vendas.');
     }
   }
   

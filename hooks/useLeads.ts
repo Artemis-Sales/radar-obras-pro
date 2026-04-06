@@ -9,8 +9,9 @@ export interface Lead {
   cidade: string;
   endereco_aproximado: string;
   estagio: string;
-  lat: number;
-  lng: number;
+  fonteOriginal?: string; // Fonte do lead (Ex: CETESB, DOE, Prefeitura)
+  lat?: number | null;
+  lng?: number | null;
   createdAt?: string | null;
   textoBruto?: string;
 }
@@ -66,9 +67,9 @@ export function useLeads() {
             }
           }
 
-          // Garantir que as coordenadas são sempre valores primitivos mapeados
-          const safeLat = typeof data.lat === 'number' ? data.lat : -23.5505 + (Math.random() - 0.5) * 0.05;
-          const safeLng = typeof data.lng === 'number' ? data.lng : -46.6333 + (Math.random() - 0.5) * 0.05;
+          // Remoção de qualquer Mock de localização: se não veio do banco, não inventamos.
+          const lat = typeof data.lat === 'number' ? data.lat : null;
+          const lng = typeof data.lng === 'number' ? data.lng : null;
 
           fetchedLeads.push({
             id: doc.id,
@@ -77,10 +78,11 @@ export function useLeads() {
             cidade: typeof data.cidade === 'string' ? data.cidade : '',
             endereco_aproximado: typeof data.endereco_aproximado === 'string' ? data.endereco_aproximado : '',
             estagio: typeof data.estagio === 'string' ? data.estagio : 'Lead Novo',
+            fonteOriginal: typeof data.fonteOriginal === 'string' ? data.fonteOriginal : 'Fonte não especificada',
             createdAt: safelyParsedDate,
             textoBruto: typeof data.textoBruto === 'string' ? data.textoBruto : '',
-            lat: safeLat,
-            lng: safeLng,
+            lat,
+            lng,
           });
       });
       

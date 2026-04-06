@@ -54,7 +54,10 @@ export function KanbanCard({ lead, onDetails }: KanbanCardProps) {
         <span className="truncate">{lead.endereco_aproximado}</span>
       </div>
       
-      <div className="mt-3 pt-3 border-t border-slate-50 flex justify-end">
+      <div className="mt-3 pt-3 border-t border-slate-50 flex justify-between items-center">
+        <span className="text-[9px] font-black text-slate-400 uppercase tracking-tighter bg-slate-100 px-1.5 py-0.5 rounded">
+          {lead.fonteOriginal}
+        </span>
         <button 
           onPointerDown={(e) => e.stopPropagation()}
           onClick={(e) => {

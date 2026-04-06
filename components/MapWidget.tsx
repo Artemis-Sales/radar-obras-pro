@@ -37,18 +37,20 @@ export function MapWidget() {
           className="w-full h-full"
           onClick={() => setSelectedLead(null)}
         >
-          {leads.map(obra => (
-            <AdvancedMarker 
-              key={obra.id} 
-              position={{ lat: obra.lat, lng: obra.lng }} 
-              title={obra.obra}
-              onClick={() => setSelectedLead(obra)}
-            >
-              <Pin background={'#10b981'} borderColor={'#047857'} glyphColor={'#fff'} />
-            </AdvancedMarker>
-          ))}
+          {leads
+            .filter(obra => obra.lat != null && obra.lng != null)
+            .map(obra => (
+              <AdvancedMarker 
+                key={obra.id} 
+                position={{ lat: obra.lat as number, lng: obra.lng as number }} 
+                title={obra.obra}
+                onClick={() => setSelectedLead(obra)}
+              >
+                <Pin background={'#10b981'} borderColor={'#047857'} glyphColor={'#fff'} />
+              </AdvancedMarker>
+            ))}
 
-          {selectedLead && (
+          {selectedLead && selectedLead.lat != null && selectedLead.lng != null && (
             <InfoWindow
               position={{ lat: selectedLead.lat, lng: selectedLead.lng }}
               onCloseClick={() => setSelectedLead(null)}

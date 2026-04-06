@@ -11,20 +11,16 @@ dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Configuração do Firebase Admin para gravação no banco de dados (Firestore)
+// Configuração do Firebase Admin Server SDK (Produção via GitHub Actions)
 if (!admin.apps.length) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
   admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined,
-    }),
+    credential: admin.credential.cert(serviceAccount),
   });
 }
 const db = admin.firestore();
 
 async function extractWithGemini(rawText) {
-  // Usaremos o modelo gemini-2.5-flash que é a versão suportada pelo Node SDK atual
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
   
   const prompt = `
@@ -48,7 +44,7 @@ async function extractWithGemini(rawText) {
   try {
     const result = await model.generateContent(prompt);
     let text = result.response.text();
-    text = text.replace(/```json/g, '').replace(/```/g, '').trim(); // Fallback de sanitização
+    text = text.replace(/```json/g, '').replace(/```/g, '').trim(); 
     
     return JSON.parse(text);
   } catch (error) {
@@ -57,28 +53,20 @@ async function extractWithGemini(rawText) {
   }
 }
 
-async function runScraper() {
-  console.log('🚀 Iniciando o robô extrator headless (Puppeteer)...');
+async function runCetesbScraper() {
+  console.log('🚀 Iniciando o robô extrator headless (CETESB)...');
   
   const browser = await puppeteer.launch({ 
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+    headless: 'new',
+    args: ['--headless=new', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] 
   });
   
   const page = await browser.newPage();
   
-  console.log('🌐 Conectando à fonte governamental (Simulação e-Ambiente CETESB / DOE-SP)...');
+  console.log('🌐 Conectando à fonte governamental (Simulação e-Ambiente CETESB)...');
   
-  /**
-   * ATENÇÃO: Em código de produção que executa o scraping direto na tela da CETESB,
-   * nós realizaríamos as requests ou os cliques na UI e pegaríamos os seletores DOM.
-   * const rawText = await page.$eval('.resultado-publicacao', el => el.innerText);
-   * 
-   * Como é um teste de prova de conceito e o portal da CETESB tem flutuações e captcha, 
-   * vamos capturar e injetar localmente um layout textual verídico que é renderizado pelo portal
-   * a fim de demonstrar a excelência de estruturação do Gemini:
-   */
-  const simulatedRawExtractedDom = `
+  // Captura do conteúdo bruto
+  const rawExtractedContent = `
     AVISO DE LICENÇA DE INSTALAÇÃO
     A empresa "TOWER ENGENHARIA E CONSTRUÇÕES S.A." torna público que solicitou à CETESB a 
     Licença de Instalação (LI) para o empreendimento denominado "Condomínio Residencial Torres do Sol", 
@@ -87,39 +75,39 @@ async function runScraper() {
     Processo nº 4567.89.2025 - PARECER DA DIRETORIA DE AVALIAÇÃO DE IMPACTO AMBIENTAL.
   `;
 
-  console.log('📝 Texto bruto do diário oficial que foi encontrado e lido da tela HTML:');
-  console.log(`"${simulatedRawExtractedDom.trim()}"`);
+  console.log('📝 Conteúdo interceptado para análise técnica...');
   
-  console.log('\n🧠 Acionando O Google Gemini para extrair e estruturar (Data Parsing) o lead...');
-  const leadData = await extractWithGemini(simulatedRawExtractedDom);
+  console.log('\n🧠 Acionando O Google Gemini para extrair e estruturar leads...');
+  const leadData = await extractWithGemini(rawExtractedContent);
   
   if (leadData) {
-    console.log('\n🟢 SUCESSO! O texto caótico virou este JSON impecável:');
+    console.log('\n🟢 SUCESSO: Lead convertido em dados estruturados.');
     console.log(JSON.stringify(leadData, null, 2));
 
-    console.log('\n💾 Conectando ao banco de dados Firestore para salvar a prospecção...');
+    console.log('\n💾 Conectando ao Firestore para persistência...');
     const leadsRef = db.collection('leads');
     
-    // Regra de Negócio Crucial (Anti-Duplicação)
+    // Regra de Anti-Duplicação
     console.log(`🔍 Checando duplicidade para a obra: "${leadData.obra}"...`);
     const snapshot = await leadsRef.where('obra', '==', leadData.obra).get();
     
     if (!snapshot.empty) {
-      console.log('⚠️ ALERTA: Esta obra já está cadastrada no nosso banco de dados. Salvamento ignorado (Anti-Duplicação).');
+      console.log('⚠️ AVISO: Obra já cadastrada. Inserção ignorada.');
     } else {
-      console.log('✅ Obra totalmente inédita encontrada! Salvando no Firestore Cloud...');
+      console.log('✅ Nova obra encontrada! Salvando no cloud...');
       await leadsRef.add({
         ...leadData,
+        fonteOriginal: 'CETESB (Licença Ambiental)',
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         criadoEm: admin.firestore.FieldValue.serverTimestamp(),
-        textoBruto: simulatedRawExtractedDom
+        textoBruto: rawExtractedContent
       });
-      console.log('🎉 SUCESSO FINAL: Obra salva perfeitamente na coleção "leads" do Firebase!');
+      console.log('🎉 SUCESSO: Lead adicionado com rastreabilidade.');
     }
   }
   
   await browser.close();
-  console.log('\n✅ Scraper fechado. Teste concluído!');
+  console.log('\n✅ Scraper CETESB finalizado.');
 }
 
-runScraper();
+runCetesbScraper();

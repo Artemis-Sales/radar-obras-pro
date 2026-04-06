@@ -46,3 +46,6 @@ next-env.d.ts
 .env.production
 .firebase
 .firebaserc
+
+# Chaves Json Service Account
+*firebase-adminsdk*.json

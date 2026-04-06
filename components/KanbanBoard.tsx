@@ -157,14 +157,26 @@ export function KanbanBoard() {
       onDragEnd={handleDragEnd}
     >
       <div className="flex gap-4 overflow-x-auto pb-4 h-[calc(100vh-250px)] items-start">
-        {COLUMNS.map(column => (
-          <KanbanColumn
-            key={column}
-            column={column}
-            leads={activeLeads.filter(l => l.estagio === column)}
-            onDetails={setDetailsLead}
-          />
-        ))}
+        {leads.length === 0 && !loading ? (
+          <div className="flex-1 h-full flex flex-col items-center justify-center bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl p-12 text-center">
+            <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6 text-slate-400">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Nenhuma obra encontrada</h3>
+            <p className="text-slate-500 max-w-sm">
+              O robô rastreador está monitorando as fontes oficiais. Novas oportunidades aparecerão aqui automaticamente em breve.
+            </p>
+          </div>
+        ) : (
+          COLUMNS.map(column => (
+            <KanbanColumn
+              key={column}
+              column={column}
+              leads={activeLeads.filter(l => l.estagio === column)}
+              onDetails={setDetailsLead}
+            />
+          ))
+        )}
       </div>
 
       <DragOverlay>

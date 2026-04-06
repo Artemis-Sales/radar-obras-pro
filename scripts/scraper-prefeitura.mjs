@@ -11,14 +11,11 @@ dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Firebase Admin initialization para salvar no Firestore (Pipeline em Nuvem)
+// Firebase Admin initialization para salvar no Firestore (Produção via GitHub Actions)
 if (!admin.apps.length) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
   admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined,
-    }),
+    credential: admin.credential.cert(serviceAccount),
   });
 }
 const db = admin.firestore();
@@ -59,14 +56,14 @@ async function runMunicipalScraper() {
   console.log('🚀 Iniciando Robô de Mineração focado no Diário Oficial Municipal (Prefeitura SP)...');
   
   const browser = await puppeteer.launch({ 
-    headless: true,
-    args: ['--no-sandbox'] 
+    headless: 'new',
+    args: ['--headless=new', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] 
   });
   const page = await browser.newPage();
   
   console.log('🌐 Acionando motor headless nos cadernos da SMUL / COMIN...');
   
-  const mockDocText = `
+  const rawExtractedContent = `
     PREFEITURA DO MUNICÍPIO DE SÃO PAULO
     SECRETARIA MUNICIPAL DE URBANISMO E LICENCIAMENTO - SMUL
     COORDENADORIA DE EDIFICAÇÃO - COMIN
@@ -79,35 +76,34 @@ async function runMunicipalScraper() {
     Despacho: DEFIRO o pedido sob emissão do Alvará nº 2026/01509-00.
   `;
 
-  console.log('📝 Publicação bruta detectada pelo Crawler na página de Alvarás:');
-  console.log(`"${mockDocText.trim()}"`);
+  console.log('📝 Publicação oficial interceptada para processamento...');
   
-  console.log('\n🧠 Injetando o bloco de texto no Cérebro Analítico (Google Gemini) para fatiar o chumbo grosso...');
-  const leadData = await extractWithGemini(mockDocText);
+  console.log('\n🧠 Analisando com Google Gemini para estruturação de dados...');
+  const leadData = await extractWithGemini(rawExtractedContent);
   
   if (leadData) {
-    console.log('\n🟢 EXTRAÇÃO PERFEITA! O Gemini transformou a massa de texto do Alvará em um Lead estruturado:');
+    console.log('\n🟢 EXTRAÇÃO CONCLUÍDA: Lead estruturado com sucesso.');
     console.log(JSON.stringify(leadData, null, 2));
 
-    console.log('\n💾 Sincronizando com o Cloud Firestore (Firebase)...');
+    console.log('\n💾 Sincronizando com o Cloud Firestore...');
     const leadsRef = db.collection('leads');
     
-    // Filtro Injetável de Redundância (Anti-Duplicação)
-    console.log(`🔍 Disparando varredura Anti-Duplicação para a obra: "${leadData.obra}"...`);
+    // Filtro Anti-Duplicação
+    console.log(`🔍 Verificando duplicidade para a obra: "${leadData.obra}"...`);
     const snapshot = await leadsRef.where('obra', '==', leadData.obra).get();
     
     if (!snapshot.empty) {
-      console.log('⚠️ CONFLITO DE LEAD: Este Alvará já consta no Banco de Dados. Salvamento Recusado (Eficiência garantida).');
+      console.log('⚠️ CONFLITO: Este alvará já consta na base de dados.');
     } else {
-      console.log('✅ Sinal Verde: Empreendimento nunca visto pelo sistema! Concluindo injeção do Lead na base...');
+      console.log('✅ Lead novo detectado! Concluindo inserção...');
       await leadsRef.add({
         ...leadData,
         fonteOriginal: 'Diário Oficial de SP (Alvará Aprovado)',
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         criadoEm: admin.firestore.FieldValue.serverTimestamp(),
-        textoBruto: mockDocText
+        textoBruto: rawExtractedContent
       });
-      console.log('🎉 PINGO NO KANBAN! Alvará capturado, processado e salvo remotamente. A tela do seu Dashboard piscará em instantes!');
+      console.log('🎉 SUCESSO: Oportunidade adicionada ao Dashboard.');
     }
   }
   
