@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏗️ Radar de Obras PRO
+> **Inteligência Artificial e Automação para Prospecção de Obras em São Paulo.**
 
-## Getting Started
+O **Radar de Obras PRO** é uma plataforma inovadora desenvolvida para empresas do setor de construção civil que desejam encontrar novos clientes de forma proativa. O sistema utiliza robôs de automação (scrapers) e Inteligência Artificial de última geração para monitorar fontes públicas e extrair oportunidades de negócios reais.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Principais Tecnologias
+- **Next.js 16 (App Router)** - Framework React para o frontend.
+- **Google Gemini 2.5 Flash** - IA para processamento de linguagem natural e extração de dados.
+- **Firebase (Firestore & Auth)** - Banco de dados em tempo real e autenticação.
+- **Puppeteer** - Automação de navegador para captura de dados governamentais.
+- **Tailwind CSS 4** - Design moderno, fluido e premium.
+- **Google Maps API** - Geolocalização de leads em mapa interativo.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎨 Funcionalidades em Destaque
+- **🕵️ Mineração Automatizada:** Busca diária por novas licenças ambientais e editais públicos.
+- **🧠 Extração com IA:** Transforma petições e diários oficiais "ilegíveis" em JSON estruturado com precisão cirúrgica.
+- **📍 Mapa de Obras:** Visualize geograficamente onde estão os novos canteiros de obras.
+- **📋 CRM Kanban:** Arraste leads entre estágios (Lead Novo, Em Negociação, Fechado) para gerenciar sua prospecção.
+- **🛡️ Anti-Duplicação:** Motor inteligente que evita o cadastro duplicado de uma mesma obra.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📁 Estrutura do Repositório
+- `/app` - Páginas e rotas do sistema (Dashboard, Login, Kanban, Mapas).
+- `/components` - Componentes reutilizáveis de UI com design premium.
+- `/lib` - Configurações de API (Firebase client, Gemini config).
+- `/scripts` - Motores de scraping (Puppeteer) e scripts de carga de dados.
+- `/public` - Ativos estáticos e ícones.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Como Iniciar
+1.  Instale as dependências: `npm install`
+2.  Configure as variáveis de ambiente no arquivo `.env.local`:
+    - `NEXT_PUBLIC_FIREBASE_...`
+    - `GEMINI_API_KEY`
+    - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
+3.  Inicie o servidor de desenvolvimento: `npm run dev`
+4.  Para testar o robô extrator: `node scripts/run-all.mjs`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📖 Documentação Completa
+Para detalhes técnicos detalhados, acesse o arquivo [DOCUMENTAÇÃO.md](./DOCUMENTAÇÃO.md).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Radar de Obras PRO - Todos os direitos reservados.*
