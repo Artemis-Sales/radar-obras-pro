@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import admin from 'firebase-admin';
+import { geocodeAddress, buildAddressString } from './geocode.mjs';
 
 // Garante que o dotenv procure o .env.local na raiz do projeto Next.js
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -94,15 +95,21 @@ async function runCetesbScraper() {
     if (!snapshot.empty) {
       console.log('⚠️ AVISO: Obra já cadastrada. Inserção ignorada.');
     } else {
-      console.log('✅ Nova obra encontrada! Salvando no cloud...');
+      console.log('✅ Nova obra encontrada! Geocodificando localização...');
+      const enderecoCompleto = buildAddressString(leadData);
+      const coordenadas = await geocodeAddress(enderecoCompleto, process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+
+      console.log('💾 Salvando no cloud...');
       await leadsRef.add({
         ...leadData,
+        lat: coordenadas ? coordenadas.lat : null,
+        lng: coordenadas ? coordenadas.lng : null,
         fonteOriginal: 'CETESB (Licença Ambiental)',
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         criadoEm: admin.firestore.FieldValue.serverTimestamp(),
         textoBruto: rawExtractedContent
       });
-      console.log('🎉 SUCESSO: Lead adicionado com rastreabilidade.');
+      console.log('🎉 SUCESSO: Lead adicionado com rastreabilidade e coordenadas.');
     }
   }
   

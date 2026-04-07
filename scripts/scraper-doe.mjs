@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import admin from 'firebase-admin';
+import { geocodeAddress, buildAddressString } from './geocode.mjs';
 
 // Carregando as variáveis de ambiente
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -95,15 +96,21 @@ async function runDoeScraper() {
     if (!snapshot.empty) {
       console.log('⚠️ CONFLITO: Lead já existente. Operação ignorada.');
     } else {
-      console.log('✅ Lead inédito detectado! Processando inclusão...');
+      console.log('✅ Lead inédito detectado! Geocodificando localização...');
+      const enderecoCompleto = buildAddressString(leadData);
+      const coordenadas = await geocodeAddress(enderecoCompleto, process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+
+      console.log('💾 Processando inclusão...');
       await leadsRef.add({
         ...leadData,
+        lat: coordenadas ? coordenadas.lat : null,
+        lng: coordenadas ? coordenadas.lng : null,
         fonteOriginal: 'Diário Oficial SP (GRAPROHAB)', 
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         criadoEm: admin.firestore.FieldValue.serverTimestamp(),
         textoBruto: rawExtractedContent
       });
-      console.log('🎉 SUCESSO: Registro inserido no funil de vendas.');
+      console.log('🎉 SUCESSO: Registro inserido no funil de vendas com coordenadas precisas.');
     }
   }
   

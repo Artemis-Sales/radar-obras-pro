@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import admin from 'firebase-admin';
+import { geocodeAddress, buildAddressString } from './geocode.mjs';
 
 // Carrega as chaves do .env.local
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -95,15 +96,21 @@ async function runMunicipalScraper() {
     if (!snapshot.empty) {
       console.log('⚠️ CONFLITO: Este alvará já consta na base de dados.');
     } else {
-      console.log('✅ Lead novo detectado! Concluindo inserção...');
+      console.log('✅ Lead novo detectado! Geocodificando localização...');
+      const enderecoCompleto = buildAddressString(leadData);
+      const coordenadas = await geocodeAddress(enderecoCompleto, process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+
+      console.log('💾 Concluindo inserção...');
       await leadsRef.add({
         ...leadData,
+        lat: coordenadas ? coordenadas.lat : null,
+        lng: coordenadas ? coordenadas.lng : null,
         fonteOriginal: 'Diário Oficial de SP (Alvará Aprovado)',
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         criadoEm: admin.firestore.FieldValue.serverTimestamp(),
         textoBruto: rawExtractedContent
       });
-      console.log('🎉 SUCESSO: Oportunidade adicionada ao Dashboard.');
+      console.log('🎉 SUCESSO: Oportunidade adicionada ao Dashboard com coordenadas precisas.');
     }
   }
   
