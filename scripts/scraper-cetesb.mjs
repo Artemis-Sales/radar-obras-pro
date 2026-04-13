@@ -21,6 +21,10 @@ if (!admin.apps.length) {
 }
 const db = admin.firestore();
 
+// URL real de consulta pública da CETESB — lista de licenciamentos ambientais
+// Filtro por atividades de construção (código 81000) e licenças recentes
+const URL_ORIGEM = 'https://licenciamento.cetesb.sp.gov.br/cetesb/processo_consulta.asp';
+
 async function extractWithGemini(rawText) {
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
   
@@ -28,6 +32,7 @@ async function extractWithGemini(rawText) {
   Você é um extrator de dados de mineração (Data Mining) especialista em diários oficiais e licenças ambientais com foco na construção civil.
   Sua tarefa é ler e analisar cirurgicamente o texto bruto de uma publicação de licenciamento e devolver ESTRITAMENTE um objeto JSON.
   NAO use formatação markdown (\`\`\`json), apenas o hash de chaves do JSON puro.
+  Se o texto não contiver dados de obras ou empreendimentos relevantes, retorne null.
   
   Formato e regras do JSON requisitado:
   {
@@ -45,8 +50,8 @@ async function extractWithGemini(rawText) {
   try {
     const result = await model.generateContent(prompt);
     let text = result.response.text();
-    text = text.replace(/```json/g, '').replace(/```/g, '').trim(); 
-    
+    text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    if (text.toLowerCase() === 'null' || text === '') return null;
     return JSON.parse(text);
   } catch (error) {
     console.error('Erro na chamada do provedor Gemini:', error);
@@ -63,21 +68,59 @@ async function runCetesbScraper() {
   });
   
   const page = await browser.newPage();
+  await page.setViewport({ width: 1280, height: 900 });
+  await page.setExtraHTTPHeaders({
+    'Accept-Language': 'pt-BR,pt;q=0.9',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36'
+  });
   
-  console.log('🌐 Conectando à fonte governamental (Simulação e-Ambiente CETESB)...');
-  
-  // Captura do conteúdo bruto
-  const rawExtractedContent = `
-    AVISO DE LICENÇA DE INSTALAÇÃO
-    A empresa "TOWER ENGENHARIA E CONSTRUÇÕES S.A." torna público que solicitou à CETESB a 
-    Licença de Instalação (LI) para o empreendimento denominado "Condomínio Residencial Torres do Sol", 
-    constituído por 4 torres residenciais familiares e área de lazer privativa, 
-    localizado na Avenida dos Autonomistas, altura do número 5000, município de Osasco. 
-    Processo nº 4567.89.2025 - PARECER DA DIRETORIA DE AVALIAÇÃO DE IMPACTO AMBIENTAL.
-  `;
+  console.log(`🌐 Conectando ao portal de consulta pública da CETESB: ${URL_ORIGEM}`);
+  await page.goto(URL_ORIGEM, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
-  console.log('📝 Conteúdo interceptado para análise técnica...');
+  // A consulta pública da CETESB usa um formulário com select de tipo de ato.
+  // Buscamos por Licenças Prévias (LP) e de Instalação (LI) — atividades de construção civil.
+  console.log('🔧 Preenchendo formulário de consulta pública...');
   
+  try {
+    // Seleciona tipo de ato: tenta selecionar LP (Licença Prévia) ou LI (Licença de Instalação)
+    const tipoAtoSelect = await page.$('select[name*="tipo"], select[name*="ato"], select[id*="tipo"]');
+    if (tipoAtoSelect) {
+      // Tenta selecionar "LI" ou "LP" na lista
+      await page.select(tipoAtoSelect, 'LI').catch(() => {});
+      console.log('📋 Tipo de ato "LI" selecionado.');
+    }
+
+    // Submete o formulário de consulta
+    const submitBtn = await page.$('input[type="submit"], button[type="submit"]');
+    if (submitBtn) {
+      await submitBtn.click();
+      await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 30000 });
+      console.log('🔍 Formulário submetido, aguardando resultados...');
+    }
+  } catch (err) {
+    console.log(`ℹ️ Formulário não disponível ou estrutura diferente. Capturando texto da página atual. (${err.message})`);
+  }
+
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  // Extrai o conteúdo real da página
+  console.log('📝 Extraindo conteúdo real da página da CETESB...');
+  const rawExtractedContent = await page.evaluate(() => {
+    // Remove scripts e estilos antes de capturar
+    document.querySelectorAll('script, style, nav, header, footer').forEach(el => el.remove());
+    const main = document.querySelector('main, #conteudo, .conteudo, table, body');
+    return main ? main.innerText.substring(0, 8000) : document.body.innerText.substring(0, 8000);
+  });
+
+  console.log(`📄 Conteúdo extraído (${rawExtractedContent.length} chars). Amostra: ${rawExtractedContent.substring(0, 300)}...`);
+
+  if (!rawExtractedContent || rawExtractedContent.trim().length < 50) {
+    console.warn('⚠️ Conteúdo insuficiente extraído da CETESB. O site pode estar com acesso restrito.');
+    await browser.close();
+    return;
+  }
+
   console.log('\n🧠 Acionando O Google Gemini para extrair e estruturar leads...');
   const leadData = await extractWithGemini(rawExtractedContent);
   
@@ -105,12 +148,15 @@ async function runCetesbScraper() {
         lat: coordenadas ? coordenadas.lat : null,
         lng: coordenadas ? coordenadas.lng : null,
         fonteOriginal: 'CETESB (Licença Ambiental)',
+        urlOrigem: URL_ORIGEM,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         criadoEm: admin.firestore.FieldValue.serverTimestamp(),
-        textoBruto: rawExtractedContent
+        textoBruto: rawExtractedContent.substring(0, 5000),
       });
       console.log('🎉 SUCESSO: Lead adicionado com rastreabilidade e coordenadas.');
     }
+  } else {
+    console.log('ℹ️ Nenhum lead relevante identificado pelo Gemini nesta extração da CETESB.');
   }
   
   await browser.close();
