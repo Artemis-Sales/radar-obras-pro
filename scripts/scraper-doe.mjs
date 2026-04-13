@@ -6,22 +6,32 @@ import { fileURLToPath } from 'url';
 import admin from 'firebase-admin';
 import { geocodeAddress, buildAddressString } from './geocode.mjs';
 
-// Carregando as variáveis de ambiente
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Configuração do Firebase Admin Server SDK
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  let credential;
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    credential = admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT));
+  } else {
+    credential = admin.credential.cert({
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+    });
+  }
+  admin.initializeApp({ credential });
 }
 const db = admin.firestore();
 
-// URL de origem real do portal DOE-SP (Caderno Executivo - Secretaria da Habitação / GRAPROHAB)
+// Pega a data exata de 14 dias atrás
+const hoje = new Date();
+const duasSemanasAtras = new Date();
+duasSemanasAtras.setDate(hoje.getDate() - 14);
+const cutoffStr = duasSemanasAtras.toISOString().split('T')[0];
+
 const URL_ORIGEM = 'https://www.doe.sp.gov.br/busca-avancada';
 const TERMO_BUSCA = 'GRAPROHAB';
 
@@ -29,19 +39,22 @@ async function extractWithGemini(rawText) {
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
   
   const prompt = `
-  Você é um extrator de dados de mineração (Data Mining) especialista no Diário Oficial do Estado de São Paulo (DOE-SP), focado na Secretaria da Habitação e aprovações urbanísticas de GRAPROHAB, loteamentos e condomínios.
-  Sua tarefa é ler atentamente o texto bruto da ata e devolver ESTRITAMENTE um objeto JSON.
-  NÃO use formatação markdown (\`\`\`json), me retorne puramente o Hash.
-  Se o texto não contiver dados de obras ou empreendimentos relevantes, retorne null.
+  Você é um extrator de dados de mineração especialista no Diário Oficial do Estado de São Paulo (DOE-SP), focado na Secretaria da Habitação e aprovações urbanísticas de GRAPROHAB, loteamentos e condomínios.
+  A data limite mais antiga que nos interessa é: ${cutoffStr} (14 dias atrás).
+  Avalie o texto da publicação. Se for anterior a esta data, IGNORAR (restornar nulo).
+  Se houver empreendimentos válidos, extraia as informações ESTRITAMENTE pro formato JSON. NÃO INVENTE DADOS.
+  NÃO retorne nomes como 'Vila Nova', 'Jardim das Flores' a menos que EXATAMENTE escritos no texto.
   
-  Regras de formatação do JSON:
-  {
-    "obra": "Nome do empreendimento, loteamento ou produto (ex: Loteamento Jardim das Flores).",
-    "construtora": "A empresa construtora, incorporadora ou interessado.",
-    "cidade": "O nome limpo do município paulista onde a obra ocorrerá (sem 'Município:' ou '- SP').",
-    "endereco_aproximado": "Localização, estrada, bairro ou região informada.",
-    "estagio": "Aprovações no GRAPROHAB significam projetos consolidados, logo o estágio deve ser 'Em Negociação'. Caso não fique claro, use 'Lead Novo'."
-  }
+  Retorne um ARRAY DE JSON puramente texto (sem crases tipo \`\`\`json):
+  [
+    {
+      "obra": "Nome do empreendimento, loteamento ou produto real mencionado no texto.",
+      "construtora": "A empresa construtora, incorporadora ou interessado.",
+      "cidade": "Nome limpo do município.",
+      "endereco_aproximado": "Localização, estrada ou bairro informada.",
+      "estagio": "Neste contexto de GRAPROHAB, retorne sempre 'Em Negociação', exceto se explícito sobre paralisação."
+    }
+  ]
 
   TEXTO BRUTO DA PUBLICAÇÃO DO DOE-SP:
   "${rawText}"
@@ -52,166 +65,136 @@ async function extractWithGemini(rawText) {
     let text = result.response.text();
     text = text.replace(/```json/g, '').replace(/```/g, '').trim();
     if (text.toLowerCase() === 'null' || text === '') return null;
-    return JSON.parse(text);
+    const parsed = JSON.parse(text);
+    return Array.isArray(parsed) ? parsed : [parsed];
   } catch (error) {
-    console.error('Falha de conexão com a infraestrutura da IA Gemini:', error);
+    console.error('Falha de conexão com a IA Gemini:', error);
     return null;
   }
 }
 
 async function runDoeScraper() {
-  console.log('🚀 Iniciando o robô de raspagem (Puppeteer) direcionado ao DOE-SP...');
+  console.log('🚀 Iniciando Puppeteer (DOE-SP GRAPROHAB - Últimos 14 dias)...');
   
   const browser = await puppeteer.launch({ 
     headless: 'new',
-    args: ['--headless=new', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] 
+    args: ['--headless=new', '--no-sandbox', '--disable-setuid-sandbox'] 
   });
   
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 900 });
   await page.setExtraHTTPHeaders({
     'Accept-Language': 'pt-BR,pt;q=0.9',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36'
+    'User-Agent': 'Mozilla/5.0'
   });
 
-  console.log(`🌐 Navegando até a Busca Avançada do DOE-SP: ${URL_ORIGEM}`);
-  await page.goto(URL_ORIGEM, { waitUntil: 'networkidle2', timeout: 60000 });
+  console.log(`🌐 Acessando a Busca do DOE-SP: ${URL_ORIGEM}`);
+  
+  try {
+    await page.goto(URL_ORIGEM, { waitUntil: 'networkidle2', timeout: 60000 });
+  } catch(e) {
+    console.log(`Falha no timeout do Chrome: ${e.message}`);
+  }
 
-  // Aguarda a SPA React carregar e fecha modal inicial se existir
   await new Promise(resolve => setTimeout(resolve, 3000));
   
   try {
-    // Fecha modal de boas-vindas, se existir
-    const closeBtn = await page.$('button[aria-label="close"], button[aria-label="fechar"], .MuiModal-root button:first-child');
+    const closeBtn = await page.$('button[aria-label="close"], button[aria-label="fechar"]');
     if (closeBtn) {
       await closeBtn.click();
-      console.log('ℹ️ Modal de boas-vindas fechado.');
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
-  } catch (_) { /* modal não existe */ }
+  } catch (_) { }
 
-  // Digita o termo de busca no campo de texto
-  console.log(`🔍 Digitando termo de busca: "${TERMO_BUSCA}"...`);
-  const termInput = await page.waitForSelector('input[type="text"], input[placeholder*="termo"], input[placeholder*="busca"], input[placeholder*="Buscar"]', { timeout: 15000 });
-  await termInput.click({ clickCount: 3 });
-  await termInput.type(TERMO_BUSCA, { delay: 80 });
-
-  // Seleciona período "Mês" para capturar publicações recentes
+  console.log(`🔍 Buscando: "${TERMO_BUSCA}"...`);
   try {
-    const dateDropdown = await page.$('div[aria-label*="data"], div[aria-label*="Data"], .MuiSelect-select');
+    const termInput = await page.waitForSelector('input[placeholder*="termo"], input[type="text"]', { timeout: 10000 });
+    await termInput.click({ clickCount: 3 });
+    await termInput.type(TERMO_BUSCA, { delay: 50 });
+  } catch(e) {}
+
+  try {
+    const dateDropdown = await page.$('div[aria-label*="data"], .MuiSelect-select');
     if (dateDropdown) {
       await dateDropdown.click();
       await new Promise(resolve => setTimeout(resolve, 1000));
-      // Procura pela opção "Mês"
-      const options = await page.$$('li[role="option"], .MuiMenuItem-root');
+      const options = await page.$$('li[role="option"]');
       for (const opt of options) {
         const txt = await opt.evaluate(el => el.textContent.trim());
-        if (txt.toLowerCase().includes('mês') || txt.toLowerCase().includes('mes')) {
-          await opt.click();
-          console.log('📅 Período "Mês" selecionado.');
-          break;
+        if (txt.toLowerCase().includes('mês')) {
+           await opt.click();
+           break;
         }
       }
     }
-  } catch (_) {
-    console.log('ℹ️ Selector de período não localizado, prosseguindo sem filtro de data.');
-  }
+  } catch (_) { }
 
-  // Clica no botão de pesquisa
-  console.log('🔎 Executando a pesquisa...');
-  const searchBtn = await page.$('button[type="submit"], button:has(svg[data-testid="SearchIcon"]), button:contains("PESQUISAR")');
-  if (searchBtn) {
-    await searchBtn.click();
-  } else {
-    await termInput.press('Enter');
-  }
+  console.log('🔎 Acionando Busca Avançada...');
+  try {
+    const searchBtn = await page.$('button[type="submit"], button:has(svg[data-testid="SearchIcon"])');
+    if (searchBtn) await searchBtn.click();
+  } catch(e) {}
 
-  // Aguarda resultados carregarem
-  console.log('⏳ Aguardando resultados da pesquisa (SPA)...');
   await new Promise(resolve => setTimeout(resolve, 5000));
 
-  // Extrai os snippets de texto dos resultados
-  console.log('📝 Extraindo conteúdo real da página...');
+  console.log('📝 Lendo extrato de despachos no SPA React...');
   const rawExtractedContent = await page.evaluate(() => {
-    // Captura o texto de todos os cards/items de resultado
-    const selectors = [
-      'article', '.resultado', '.result-item', '.MuiCard-root',
-      'h6', '.MuiTypography-h6', 'p.MuiTypography-body1',
-      '[class*="result"]', '[class*="publicacao"]', '[class*="noticia"]'
-    ];
-    
     let textos = [];
-    
-    // Tenta capturar via selectors específicos
-    for (const sel of selectors) {
-      const els = document.querySelectorAll(sel);
-      if (els.length > 0) {
-        els.forEach(el => {
-          const t = el.innerText?.trim();
-          if (t && t.length > 30) textos.push(t);
-        });
-      }
-    }
-    
-    // Fallback: captura o innerText geral da área principal
-    if (textos.length === 0) {
-      const main = document.querySelector('main, #root, .App, [role="main"]');
-      if (main) {
-        textos.push(main.innerText.substring(0, 8000));
-      }
-    }
-    
-    return textos.slice(0, 20).join('\n---\n');
+    const elements = document.querySelectorAll('article, .resultado, h6, p.MuiTypography-body1');
+    elements.forEach(el => {
+      const t = el.innerText?.trim();
+      if (t && t.length > 20) textos.push(t);
+    });
+    return textos.slice(0, 30).join('\\n---\\n');
   });
 
-  console.log(`📄 Conteúdo extraído (${rawExtractedContent.length} chars). Amostra: ${rawExtractedContent.substring(0, 200)}...`);
-
   if (!rawExtractedContent || rawExtractedContent.trim().length < 50) {
-    console.warn('⚠️ Conteúdo insuficiente extraído. O site pode ter bloqueado o acesso ou a estrutura mudou.');
+    console.warn('⚠️ O site do DOE-SP não carregou blocos de publicações pesquisáveis no momento.');
     await browser.close();
     return;
   }
 
-  console.log('\n🧠 Encaminhando para o LLM Google Gemini parametrizar os dados...');
-  const leadData = await extractWithGemini(rawExtractedContent);
+  console.log('\n🧠 Acionando a IA para estruturar (Limite 14 dias atrás)...');
+  const leadsArray = await extractWithGemini(rawExtractedContent);
   
-  if (leadData) {
-    console.log('\n🟢 TRANSFORMAÇÃO CONCLUÍDA: Dados estruturados com sucesso.');
-    console.log(JSON.stringify(leadData, null, 2));
-
-    console.log('\n💾 Sincronizando com o Cloud Firestore...');
+  if (leadsArray && leadsArray.length > 0) {
+    console.log(`\n🟢 FORAM COMPILADOS ${leadsArray.length} PROCESSO(S). Verificando redundância...`);
+    
     const leadsRef = db.collection('leads');
-    
-    // Verificação de Redundância/Duplicidade
-    console.log(`🔍 Verificando se "${leadData.obra}" já existe na base...`);
-    const snapshot = await leadsRef.where('obra', '==', leadData.obra).get();
-    
-    if (!snapshot.empty) {
-      console.log('⚠️ CONFLITO: Lead já existente. Operação ignorada.');
-    } else {
-      console.log('✅ Lead inédito detectado! Geocodificando localização...');
-      const enderecoCompleto = buildAddressString(leadData);
-      const coordenadas = await geocodeAddress(enderecoCompleto, process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
 
-      console.log('💾 Processando inclusão...');
-      await leadsRef.add({
-        ...leadData,
-        lat: coordenadas ? coordenadas.lat : null,
-        lng: coordenadas ? coordenadas.lng : null,
-        fonteOriginal: 'Diário Oficial SP (GRAPROHAB)',
-        urlOrigem: URL_ORIGEM,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        criadoEm: admin.firestore.FieldValue.serverTimestamp(),
-        textoBruto: rawExtractedContent.substring(0, 5000),
-      });
-      console.log('🎉 SUCESSO: Registro inserido no funil de vendas com coordenadas precisas.');
+    for (const leadData of leadsArray) {
+       if(!leadData.obra || !leadData.construtora) continue;
+
+       const snapshot = await leadsRef
+         .where('obra', '==', leadData.obra)
+         .where('construtora', '==', leadData.construtora)
+         .get();
+       
+       if (!snapshot.empty) {
+         console.log(`⚠️ ALERTA DE REPETIÇÃO: [${leadData.obra}] já foi detectado anteriormente.`);
+       } else {
+         console.log(`✅ [${leadData.obra}] É UM LEAD EXCLUSIVO! Adicionando...`);
+         const localStr = buildAddressString(leadData);
+         const coordenadas = await geocodeAddress(localStr, process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+
+         await leadsRef.add({
+           ...leadData,
+           lat: coordenadas ? coordenadas.lat : null,
+           lng: coordenadas ? coordenadas.lng : null,
+           fonteOriginal: 'Diário Oficial SP (GRAPROHAB)',
+           urlOrigem: URL_ORIGEM,
+           createdAt: admin.firestore.FieldValue.serverTimestamp(),
+           criadoEm: admin.firestore.FieldValue.serverTimestamp()
+         });
+         console.log('🎉 INCLUSÃO FEITA COM SUCESSO E COORDENADAS GRAVADAS.');
+       }
     }
   } else {
-    console.log('ℹ️ Nenhum lead relevante identificado pelo Gemini nesta extração.');
+    console.log('ℹ️ Nenhuma nova licença relevante nesses últimos dias.');
   }
   
   await browser.close();
-  console.log('\n🛑 Shutdown completo do Node Process para o Módulo DOE.');
+  console.log('\n🛑 Execução DOE Finalizada.');
 }
 
 runDoeScraper();

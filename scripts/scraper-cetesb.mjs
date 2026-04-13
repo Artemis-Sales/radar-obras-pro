@@ -6,44 +6,63 @@ import { fileURLToPath } from 'url';
 import admin from 'firebase-admin';
 import { geocodeAddress, buildAddressString } from './geocode.mjs';
 
-// Garante que o dotenv procure o .env.local na raiz do projeto Next.js
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Configuração do Firebase Admin Server SDK (Produção via GitHub Actions)
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  let credential;
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    credential = admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT));
+  } else {
+    credential = admin.credential.cert({
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+    });
+  }
+  admin.initializeApp({ credential });
 }
 const db = admin.firestore();
 
-// URL real de consulta pública da CETESB — lista de licenciamentos ambientais
-// Filtro por atividades de construção (código 81000) e licenças recentes
-const URL_ORIGEM = 'https://licenciamento.cetesb.sp.gov.br/cetesb/processo_consulta.asp';
+// Formata as datas para a consulta (últimos 14 dias)
+const today = new Date();
+const twoWeeksAgo = new Date();
+twoWeeksAgo.setDate(today.getDate() - 14);
+
+const formatDate = (date) => {
+  return date.toISOString().split('T')[0]; // YYYY-MM-DD
+};
+
+const dateInic = formatDate(twoWeeksAgo);
+const dateEnd = formatDate(today);
+
+// URL real de pesquisa da CETESB filtrando pelos últimos 14 dias
+const URL_ORIGEM = `https://sistemasinter02.cetesb.sp.gov.br/consultaLicenciamento/public/Index.php?dateInic=${dateInic}&dateEnd=${dateEnd}`;
 
 async function extractWithGemini(rawText) {
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
   
   const prompt = `
-  Você é um extrator de dados de mineração (Data Mining) especialista em diários oficiais e licenças ambientais com foco na construção civil.
-  Sua tarefa é ler e analisar cirurgicamente o texto bruto de uma publicação de licenciamento e devolver ESTRITAMENTE um objeto JSON.
-  NAO use formatação markdown (\`\`\`json), apenas o hash de chaves do JSON puro.
-  Se o texto não contiver dados de obras ou empreendimentos relevantes, retorne null.
+  Você é um extrator de dados de mineração (Data Mining) especialista em diários oficiais e licenças ambientais.
+  Leia as informações brutas (tabela de processos da CETESB) e devolva APENAS registros que claramente se refiram à CONSTRUÇÃO CIVIL ou INCORPORAÇÃO IMOBILIÁRIA (loteamentos, condomínios, residenciais, galpões).
+  Se o texto não contiver empreendimentos de construção relevantes ou se estiver vazio, retorne \`null\`.
+  NÃO invente dados. NÃO use os mesmos exemplos anteriores na sua resposta. Extraia estritamente o que está no texto.
+  NÃO use formatação markdown, apenas retorne um array de JSONs (caso haja mais de um), ou um único JSON.
   
-  Formato e regras do JSON requisitado:
-  {
-    "obra": "Nome do empreendimento, condomínio civil, loteamento. Extraia o nome exato.",
-    "construtora": "A empresa construtora, incorporadora, engenharia ou requerente do processo.",
-    "cidade": "O nome limpo do município onde a obra ocorrerá (sem '- SP').",
-    "endereco_aproximado": "Rua, avenida ou região se informada.",
-    "estagio": "SE for uma Licença Prévia ou LP, o estágio é 'Lead Novo'. SE for Licença de Instalação ou LI, é 'Em Negociação'. Caso não especificado mas relacione-se a construção, use 'Lead Novo'."
-  }
+  Formato e regras:
+  [
+    {
+      "obra": "Nome do empreendimento ou local extraído exatamente como está. NÃO invente nomes.",
+      "construtora": "Nome do Interessado ou requerente.",
+      "cidade": "Município informado.",
+      "endereco_aproximado": "Endereço extraído.",
+      "estagio": "Se o Tipo for Licença Prévia ou LP, retorne 'Lead Novo'. Se for Licença de Instalação ou LI, retorne 'Em Negociação'. Caso não especificado mas seja construção civil, retorne 'Lead Novo'."
+    }
+  ]
 
-  TEXTO BRUTO DA PUBLICAÇÃO:
+  TEXTO BRUTO DA CETESB (Tabela de Resultados dos últimos 14 dias):
   "${rawText}"
   `;
 
@@ -52,7 +71,9 @@ async function extractWithGemini(rawText) {
     let text = result.response.text();
     text = text.replace(/```json/g, '').replace(/```/g, '').trim();
     if (text.toLowerCase() === 'null' || text === '') return null;
-    return JSON.parse(text);
+    
+    const parsed = JSON.parse(text);
+    return Array.isArray(parsed) ? parsed : [parsed];
   } catch (error) {
     console.error('Erro na chamada do provedor Gemini:', error);
     return null;
@@ -60,107 +81,95 @@ async function extractWithGemini(rawText) {
 }
 
 async function runCetesbScraper() {
-  console.log('🚀 Iniciando o robô extrator headless (CETESB)...');
+  console.log('🚀 Iniciando o robô extrator headless (CETESB - Últimas 2 semanas)...');
   
   const browser = await puppeteer.launch({ 
     headless: 'new',
-    args: ['--headless=new', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] 
+    args: ['--headless=new', '--no-sandbox', '--disable-setuid-sandbox'] 
   });
   
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 900 });
   await page.setExtraHTTPHeaders({
     'Accept-Language': 'pt-BR,pt;q=0.9',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
   });
   
-  console.log(`🌐 Conectando ao portal de consulta pública da CETESB: ${URL_ORIGEM}`);
-  await page.goto(URL_ORIGEM, { waitUntil: 'domcontentloaded', timeout: 60000 });
-  await new Promise(resolve => setTimeout(resolve, 2000));
-
-  // A consulta pública da CETESB usa um formulário com select de tipo de ato.
-  // Buscamos por Licenças Prévias (LP) e de Instalação (LI) — atividades de construção civil.
-  console.log('🔧 Preenchendo formulário de consulta pública...');
+  console.log(`🌐 Navegando: ${URL_ORIGEM}`);
   
   try {
-    // Seleciona tipo de ato: tenta selecionar LP (Licença Prévia) ou LI (Licença de Instalação)
-    const tipoAtoSelect = await page.$('select[name*="tipo"], select[name*="ato"], select[id*="tipo"]');
-    if (tipoAtoSelect) {
-      // Tenta selecionar "LI" ou "LP" na lista
-      await page.select(tipoAtoSelect, 'LI').catch(() => {});
-      console.log('📋 Tipo de ato "LI" selecionado.');
-    }
-
-    // Submete o formulário de consulta
-    const submitBtn = await page.$('input[type="submit"], button[type="submit"]');
-    if (submitBtn) {
-      await submitBtn.click();
-      await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 30000 });
-      console.log('🔍 Formulário submetido, aguardando resultados...');
-    }
-  } catch (err) {
-    console.log(`ℹ️ Formulário não disponível ou estrutura diferente. Capturando texto da página atual. (${err.message})`);
+    await page.goto(URL_ORIGEM, { waitUntil: 'networkidle2', timeout: 60000 });
+  } catch(e) {
+    console.log(`Erro ao acessar a página: ${e.message}`);
   }
 
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
-  // Extrai o conteúdo real da página
-  console.log('📝 Extraindo conteúdo real da página da CETESB...');
+  console.log('📝 Extraindo e limpando a tabela de publicações...');
   const rawExtractedContent = await page.evaluate(() => {
-    // Remove scripts e estilos antes de capturar
-    document.querySelectorAll('script, style, nav, header, footer').forEach(el => el.remove());
-    const main = document.querySelector('main, #conteudo, .conteudo, table, body');
-    return main ? main.innerText.substring(0, 8000) : document.body.innerText.substring(0, 8000);
+    // Pegando apenas a tabela de resultados para evitar lixo
+    const rows = document.querySelectorAll('tr');
+    let text = [];
+    rows.forEach(tr => {
+      // Ignora linhas sem texto útil
+      if(tr.innerText && tr.innerText.trim().length > 10) {
+         text.push(tr.innerText.replace(/\\s+/g, ' ').trim());
+      }
+    });
+    return text.slice(0, 100).join('\\n'); // Limita o tamanho para o Gemini
   });
 
-  console.log(`📄 Conteúdo extraído (${rawExtractedContent.length} chars). Amostra: ${rawExtractedContent.substring(0, 300)}...`);
-
   if (!rawExtractedContent || rawExtractedContent.trim().length < 50) {
-    console.warn('⚠️ Conteúdo insuficiente extraído da CETESB. O site pode estar com acesso restrito.');
+    console.warn('⚠️ Conteúdo insuficiente extraído da CETESB. Pode não haver novos leads nos últimos 14 dias.');
     await browser.close();
     return;
   }
 
-  console.log('\n🧠 Acionando O Google Gemini para extrair e estruturar leads...');
-  const leadData = await extractWithGemini(rawExtractedContent);
+  console.log('\n🧠 Acionando O Google Gemini...');
+  const leadsArray = await extractWithGemini(rawExtractedContent);
   
-  if (leadData) {
-    console.log('\n🟢 SUCESSO: Lead convertido em dados estruturados.');
-    console.log(JSON.stringify(leadData, null, 2));
-
-    console.log('\n💾 Conectando ao Firestore para persistência...');
+  if (leadsArray && leadsArray.length > 0) {
+    console.log(`\n🟢 SUCESSO: ${leadsArray.length} lead(s) extraído(s) da API LLM.`);
+    
     const leadsRef = db.collection('leads');
-    
-    // Regra de Anti-Duplicação
-    console.log(`🔍 Checando duplicidade para a obra: "${leadData.obra}"...`);
-    const snapshot = await leadsRef.where('obra', '==', leadData.obra).get();
-    
-    if (!snapshot.empty) {
-      console.log('⚠️ AVISO: Obra já cadastrada. Inserção ignorada.');
-    } else {
-      console.log('✅ Nova obra encontrada! Geocodificando localização...');
-      const enderecoCompleto = buildAddressString(leadData);
-      const coordenadas = await geocodeAddress(enderecoCompleto, process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
 
-      console.log('💾 Salvando no cloud...');
-      await leadsRef.add({
-        ...leadData,
-        lat: coordenadas ? coordenadas.lat : null,
-        lng: coordenadas ? coordenadas.lng : null,
-        fonteOriginal: 'CETESB (Licença Ambiental)',
-        urlOrigem: URL_ORIGEM,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        criadoEm: admin.firestore.FieldValue.serverTimestamp(),
-        textoBruto: rawExtractedContent.substring(0, 5000),
-      });
-      console.log('🎉 SUCESSO: Lead adicionado com rastreabilidade e coordenadas.');
+    for (const leadData of leadsArray) {
+      if(!leadData.obra || !leadData.construtora) continue;
+
+      console.log(`\n🔍 Verificando na base: "${leadData.obra}" (${leadData.cidade})...`);
+      
+      // Busca composta e exata (anti-duplicação forte por nome e construtora)
+      const snapshot = await leadsRef
+        .where('obra', '==', leadData.obra)
+        .where('construtora', '==', leadData.construtora)
+        .get();
+        
+      if (!snapshot.empty) {
+        console.log('⚠️ AVISO: Empreendimento já consta na base. Ignorado.');
+      } else {
+        console.log('✅ Lead é INÉDITO! Geocodificando endereço...');
+        const enderecoCompleto = buildAddressString(leadData);
+        const coordenadas = await geocodeAddress(enderecoCompleto, process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+
+        console.log('💾 Inserindo lead...');
+        await leadsRef.add({
+          ...leadData,
+          lat: coordenadas ? coordenadas.lat : null,
+          lng: coordenadas ? coordenadas.lng : null,
+          fonteOriginal: 'CETESB (Licença Ambiental)',
+          urlOrigem: URL_ORIGEM,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          criadoEm: admin.firestore.FieldValue.serverTimestamp()
+        });
+        console.log(`🎉 SUCESSO: [${leadData.obra}] sincronizado.`);
+      }
     }
   } else {
-    console.log('ℹ️ Nenhum lead relevante identificado pelo Gemini nesta extração da CETESB.');
+    console.log('ℹ️ Nenhum dado de obra civil relevante classificado pelo Gemini nestes últimos 14 dias.');
   }
   
   await browser.close();
-  console.log('\n✅ Scraper CETESB finalizado.');
+  console.log('\n✅ Scraper CETESB concluído.');
 }
 
 runCetesbScraper();

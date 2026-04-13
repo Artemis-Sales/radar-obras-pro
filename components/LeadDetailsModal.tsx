@@ -61,7 +61,7 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
               {lead.endereco_aproximado} - {lead.cidade}
             </p>
             <div className="mt-2 text-xs font-mono text-slate-400">
-              Lat: {lead.lat.toFixed(4)} | Lng: {lead.lng.toFixed(4)}
+              Lat: {lead.lat != null ? lead.lat.toFixed(4) : 'N/A'} | Lng: {lead.lng != null ? lead.lng.toFixed(4) : 'N/A'}
             </div>
           </div>
 
