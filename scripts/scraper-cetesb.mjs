@@ -42,7 +42,7 @@ const dateEnd = formatDate(today);
 const URL_ORIGEM = `https://sistemasinter02.cetesb.sp.gov.br/consultaLicenciamento/public/Index.php?dateInic=${dateInic}&dateEnd=${dateEnd}`;
 
 async function extractWithGemini(rawText) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
   
   const prompt = `
   Você é um extrator de dados de mineração (Data Mining) especialista em diários oficiais e licenças ambientais.
@@ -116,7 +116,7 @@ async function runCetesbScraper() {
          text.push(tr.innerText.replace(/\\s+/g, ' ').trim());
       }
     });
-    return text.slice(0, 100).join('\\n'); // Limita o tamanho para o Gemini
+    return text.slice(0, 40).join('\\n'); // Limita o tamanho para o Gemini
   });
 
   if (!rawExtractedContent || rawExtractedContent.trim().length < 50) {

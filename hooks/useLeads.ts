@@ -10,10 +10,16 @@ export interface Lead {
   endereco_aproximado: string;
   estagio: string;
   fonteOriginal?: string; // Fonte do lead (Ex: CETESB, DOE, Prefeitura)
+  urlOrigem?: string | null; // Link direto para a fonte da informação do lead
   lat?: number | null;
   lng?: number | null;
   createdAt?: string | null;
   textoBruto?: string;
+  enrichedData?: {
+    website?: string | null;
+    phone?: string | null;
+    summary?: string;
+  };
 }
 
 export const updateLeadStage = async (leadId: string, novoEstagio: string) => {
@@ -79,10 +85,12 @@ export function useLeads() {
             endereco_aproximado: typeof data.endereco_aproximado === 'string' ? data.endereco_aproximado : '',
             estagio: typeof data.estagio === 'string' ? data.estagio : 'Lead Novo',
             fonteOriginal: typeof data.fonteOriginal === 'string' ? data.fonteOriginal : 'Fonte não especificada',
+            urlOrigem: typeof data.urlOrigem === 'string' ? data.urlOrigem : null,
             createdAt: safelyParsedDate,
             textoBruto: typeof data.textoBruto === 'string' ? data.textoBruto : '',
             lat,
             lng,
+            enrichedData: data.enrichedData || undefined,
           });
       });
       

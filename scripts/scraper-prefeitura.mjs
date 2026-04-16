@@ -36,7 +36,7 @@ const URL_ORIGEM = 'https://www.doe.sp.gov.br/busca-avancada';
 const TERMO_BUSCA = 'Alvará Aprovação Execução Edificação SMUL';
 
 async function extractWithGemini(rawText) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
   
   const prompt = `
   Você é um especialista em análise do Diário Oficial de São Paulo.
@@ -131,7 +131,7 @@ async function runMunicipalScraper() {
       const t = el.innerText?.trim();
       if (t && t.length > 20) textos.push(t);
     });
-    return textos.slice(0, 30).join('\\n---\\n');
+    return textos.slice(0, 15).map(t => t.substring(0, 800)).join('\\n---\\n');
   });
 
   if (!rawExtractedContent || rawExtractedContent.trim().length < 50) {

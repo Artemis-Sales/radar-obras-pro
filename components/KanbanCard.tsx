@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Building, MapPin } from 'lucide-react';
+import { Building, MapPin, Globe } from 'lucide-react';
 import { Lead } from '@/hooks/useLeads';
 
 interface KanbanCardProps {
@@ -55,9 +55,21 @@ export function KanbanCard({ lead, onDetails }: KanbanCardProps) {
       </div>
       
       <div className="mt-3 pt-3 border-t border-slate-50 flex justify-between items-center">
-        <span className="text-[9px] font-black text-slate-400 uppercase tracking-tighter bg-slate-100 px-1.5 py-0.5 rounded">
-          {lead.fonteOriginal}
-        </span>
+        {lead.urlOrigem ? (
+          <a 
+            href={lead.urlOrigem} 
+            target="_blank" 
+            rel="noreferrer"
+            onPointerDown={(e) => e.stopPropagation()}
+            className="flex items-center gap-1 text-[9px] font-black text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-1.5 py-0.5 rounded uppercase tracking-tighter transition-colors cursor-pointer"
+          >
+            {lead.fonteOriginal} <Globe size={8} />
+          </a>
+        ) : (
+          <span className="text-[9px] font-black text-slate-400 uppercase tracking-tighter bg-slate-100 px-1.5 py-0.5 rounded">
+            {lead.fonteOriginal}
+          </span>
+        )}
         <button 
           onPointerDown={(e) => e.stopPropagation()}
           onClick={(e) => {
