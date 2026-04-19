@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Home, KanbanSquare, Table2, Settings } from 'lucide-react';
+import { Home, KanbanSquare, Table2, Settings, Search } from 'lucide-react';
 
 export function Sidebar() {
   return (
@@ -9,6 +9,10 @@ export function Sidebar() {
         Radar PRO
       </div>
       <nav className="w-full px-4 flex flex-col gap-2">
+        <Link href="/busca" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-colors">
+          <Search size={20} />
+          <span className="font-bold">Busca de Obras</span>
+        </Link>
         <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors">
           <Home size={20} />
           <span className="font-medium">Dashboard</span>
