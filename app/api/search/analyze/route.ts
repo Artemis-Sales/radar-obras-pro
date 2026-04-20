@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: 'GEMINI_API_KEY não configurada.' }, { status: 500 });
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
 
     const prompt = `Você é um consultor sênior de prospecção comercial no setor de construção civil brasileiro.
 Um engenheiro civil está buscando novas oportunidades de obras e encontrou o seguinte resultado:
