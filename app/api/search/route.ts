@@ -74,7 +74,7 @@ async function parseIntent(query: string): Promise<ParsedIntent> {
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
 
     const prompt = `Você é um parser de intenções de busca de obras de construção civil no Brasil.
 Analise a seguinte frase e extraia a intenção estruturada.

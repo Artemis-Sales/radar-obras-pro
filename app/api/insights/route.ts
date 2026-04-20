@@ -57,7 +57,7 @@ export async function GET() {
     });
 
     // 2. Chamar Gemini para sumarizar curto e útil (sem alucinar)
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
     
     // Convert to text to save tokens
     const textData = leadsData.map(l => `${l.obra} (${l.cidade}) - ${l.construtora} [${l.estagio}]`).join('\n');

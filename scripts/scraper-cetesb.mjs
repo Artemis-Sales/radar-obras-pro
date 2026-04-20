@@ -42,7 +42,7 @@ const dateEnd = formatDate(today);
 const URL_ORIGEM = `https://sistemasinter02.cetesb.sp.gov.br/consultaLicenciamento/public/Index.php?dateInic=${dateInic}&dateEnd=${dateEnd}`;
 
 async function extractWithGemini(rawText) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
   
   const prompt = `
   Você é um extrator de dados de mineração (Data Mining) especialista em diários oficiais e licenças ambientais.
