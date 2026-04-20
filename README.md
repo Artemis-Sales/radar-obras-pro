@@ -1,51 +1,47 @@
-# 🏗️ Radar de Obras PRO
-> **Inteligência Artificial e Automação para Prospecção de Obras em São Paulo.**
+# 🏗️ Radar de Obras PRO | Inteligência B2B na Construção Civil
 
-O **Radar de Obras PRO** é uma plataforma inovadora desenvolvida para empresas do setor de construção civil que desejam encontrar novos clientes de forma proativa. O sistema utiliza robôs de automação (scrapers) e Inteligência Artificial de última geração para monitorar fontes públicas e extrair oportunidades de negócios reais.
+![Status](https://img.shields.io/badge/Status-Em%20Produ%C3%A7%C3%A3o-success)
+![Next.js](https://img.shields.io/badge/Next.js-14.x-black?logo=next.js)
+![Google Gemini](https://img.shields.io/badge/Google%20Gemini-Flash_Latest-blue?logo=google)
+![Firebase](https://img.shields.io/badge/Firebase-v10-yellow?logo=firebase)
 
----
+O **Radar de Obras PRO** é uma plataforma de Inteligência de Mercado B2B projetada para resolver a ineficiência na prospecção de vendas da construção civil. Através de "Data Mining" e "Inteligência Artificial", o sistema coleta massivamente dados burocráticos, filtra ruídos e sinaliza automaticamente o nível de urgência comercial de novos alvarás e licenciamentos em São Paulo.
 
-## 🚀 Principais Tecnologias
-- **Next.js 16 (App Router)** - Framework React para o frontend.
-- **Google Gemini 2.5 Flash** - IA para processamento de linguagem natural e extração de dados.
-- **Firebase (Firestore & Auth)** - Banco de dados em tempo real e autenticação.
-- **Puppeteer** - Automação de navegador para captura de dados governamentais.
-- **Tailwind CSS 4** - Design moderno, fluido e premium.
-- **Google Maps API** - Geolocalização de leads em mapa interativo.
+## 🚧 O Problema
 
----
+Para empresas que vendem insumos (concreto, cimento, escoramento, maquinário) ou prestam serviços na construção civil corporativa, encontrar o "*Timing*" da obra é essencial. Procuradores manuais, raspadores genéricos (scrapers) e buscadores de licitações públicas geram uma avalanche de planilhas de chumbo inútil, trazendo editais que não cabem no perfil privado ou chegando atrasado quando as negociações já fecharam.
 
-## 🎨 Funcionalidades em Destaque
-- **🕵️ Mineração Automatizada:** Busca diária por novas licenças ambientais e editais públicos.
-- **🧠 Extração com IA:** Transforma petições e diários oficiais "ilegíveis" em JSON estruturado com precisão cirúrgica.
-- **📍 Mapa de Obras:** Visualize geograficamente onde estão os novos canteiros de obras.
-- **📋 CRM Kanban:** Arraste leads entre estágios (Lead Novo, Em Negociação, Fechado) para gerenciar sua prospecção.
-- **🛡️ Anti-Duplicação:** Motor inteligente que evita o cadastro duplicado de uma mesma obra.
+## 🚀 A Solução (A Proposta de Valor)
 
----
+Ao invés de retornar apenas editais aleatórios, o ecossistema atua como um autêntico filtro inteligente de Inteligência Comercial (Sales Intelligence):
 
-## 📁 Estrutura do Repositório
-- `/app` - Páginas e rotas do sistema (Dashboard, Login, Kanban, Mapas).
-- `/components` - Componentes reutilizáveis de UI com design premium.
-- `/lib` - Configurações de API (Firebase client, Gemini config).
-- `/scripts` - Motores de scraping (Puppeteer) e scripts de carga de dados.
-- `/public` - Ativos estáticos e ícones.
+1. **Scraping Customizado:** Motores integrados rastreiam o Diário Oficial, CETESB e Aprovações Governamentais para "pescar" emissões exatas de licitações de grande escopo, focando em condomínios e loteamentos em SP.
+2. **Scoring Heurístico B2B:** Algoritmo de priorização de pontuação.
+   * `🔴 +50 Pontos:` Emissões de novos Alvarás (indica que a terra será escavada em poucas semanas).
+   * `🔴 +50 Pontos:` Match reverso com Construtoras Alvo.
+   * `🟠 +30 Pontos:` Detecção Regex de telefones e e-mails atrelados.
+3. **Analisador de IA (Briefing Direto):** O usuário não precisa ler 3 páginas de um Diário Oficial denso. Com um clique em "Analisar com IA", um agente usando *Google Gemini* lê o documento e constrói um resumo ágil: *"O que é a obra, Onde é, O que vender, Vale a pena?"*
 
----
+## 🛠️ Stack Tecnológica
 
-## 🛠️ Como Iniciar
-1.  Instale as dependências: `npm install`
-2.  Configure as variáveis de ambiente no arquivo `.env.local`:
-    - `NEXT_PUBLIC_FIREBASE_...`
-    - `GEMINI_API_KEY`
-    - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
-3.  Inicie o servidor de desenvolvimento: `npm run dev`
-4.  Para testar o robô extrator: `node scripts/run-all.mjs`
+O projeto foi construído pensando nas melhores práticas do mercado, mantendo velocidade em tempo de execução e baixo custo de operações na nuvem.
+
+- **Front-end:** [React](https://reactjs.org/) e [Next.js (App Router)](https://nextjs.org/) rodando estático/dinâmico e provendo APIs ágeis. Hospedado globalmente na **Vercel**.
+- **User Interface (UI):** [Tailwind CSS](https://tailwindcss.com/) com elementos interativos baseados em Lucide Icons. Layout focado integralmente na experiência de um *Vendedor Técnico / Engenheiro*.
+- **Back-end e Banco de Dados:** [Firebase (Firestore)](https://firebase.google.com/) responsável por reter bases tratadas via NoSQL e lidar com a Autenticação (Firebase Auth).
+- **Core de Inteligência:** Integração nativa SDK do `@google/generative-ai` com os modelos fundacionais de linguagem do **Google Gemini (Flash)** em `v1beta`.
+- **Rastreadores Espaciais:** Scripts robustos em Vanilla Node.js injetados na malha de coleta assíncrona.
+
+## ⚙️ Principais Funcionalidades Implementadas
+
+- [x] Motor duplo de busca (APIs Federais + Banco de Dados Local).
+- [x] Regras dinâmicas de filtragem de lixo do estado de SP por "Pesos" (Scoring Algorithm).
+- [x] Painel de "Dashboard de Insights" capaz de sumarizar macrotendências com IA a partir de dezenas de leads salvos.
+- [x] Fluxo de "Salvar Lead" estilo Kanban (Favoritos de Vendas).
+- [x] Badges visuais imediatistas (🚩 Alvará, 🚩 Tem contato, ✨ Motivo de Recomendação).
 
 ---
 
-## 📖 Documentação Completa
-Para detalhes técnicos detalhados, acesse o arquivo [DOCUMENTAÇÃO.md](./DOCUMENTAÇÃO.md).
+> *"Transformando dados pesados perdidos em repartições públicas na listagem de ligações diárias de um vendedor."*
 
----
-*Radar de Obras PRO - Todos os direitos reservados.*
+*Este sistema integra o portfólio focado em Engenharia de Software focada em Soluções Corporativas.*
