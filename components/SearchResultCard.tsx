@@ -34,6 +34,11 @@ interface SearchResultData {
   data_publicacao: string;
   url_original: string;
   relevancia: number;
+
+  motivo_recomendacao?: string;
+  tem_contato?: boolean;
+  tem_alvara?: boolean;
+
   modalidade?: string;
   numero_controle?: string;
   data_abertura?: string;
