@@ -36,7 +36,7 @@ const URL_ORIGEM = 'https://www.doe.sp.gov.br/busca-avancada';
 const TERMO_BUSCA = 'GRAPROHAB';
 
 async function extractWithGemini(rawText) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
   
   const prompt = `
   Você é um extrator de dados de mineração especialista no Diário Oficial do Estado de São Paulo (DOE-SP), focado na Secretaria da Habitação e aprovações urbanísticas de GRAPROHAB, loteamentos e condomínios.
