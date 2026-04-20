@@ -25,9 +25,9 @@ interface SavedSearch {
 
 interface SavedSearchesProps {
   currentQuery?: string;
-  currentFilters?: Record<string, unknown>;
+  currentFilters?: object;
   currentResultCount?: number;
-  onRunSearch: (query: string, filters?: Record<string, unknown>) => void;
+  onRunSearch: (query: string, filters?: object) => void;
 }
 
 export function SavedSearches({
