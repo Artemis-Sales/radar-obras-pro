@@ -16,6 +16,8 @@ import {
   Timer,
   Database,
   Sparkles,
+  Info,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface SearchResultData {
@@ -317,25 +319,45 @@ export default function BuscaPage() {
                   onRunSearch={handleRunSavedSearch}
                 />
               </div>
+            </div>
+          )}
 
-              {/* Intenção interpretada */}
-              {response.intent && (
-                <div className="flex items-center gap-2 text-xs text-slate-400">
-                  <Sparkles size={13} className="text-violet-400" />
+          {/* Legenda de Prioridades B2B */}
+          {response && hasResults && (
+            <div className="mt-6 mb-2 flex flex-col md:flex-row items-start md:items-center justify-between bg-blue-50/50 border border-blue-100 rounded-lg p-3">
+              <div className="flex items-center gap-2 text-[13px] text-blue-800 font-medium">
+                <Info size={16} className="text-blue-500" />
+                <span>Critérios de Prioridade B2B do Radar:</span>
+              </div>
+              <div className="flex flex-wrap gap-3 mt-2 md:mt-0 text-[11px] font-bold uppercase tracking-wide">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded-md">
+                  <span className="text-red-500 text-xs">🔴</span> Score Máximo (Alvará ou Prioridade)
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-orange-100 text-orange-700 rounded-md">
+                  <span className="text-orange-500 text-xs">🟠</span> Alto (Com Contato)
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-700 rounded-md">
+                  <span className="text-yellow-500 text-xs">🟡</span> Médio (Grande Porte)
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Intenção interpretada */}
+          {response && response.intent && (
+            <div className="flex items-center gap-2 text-xs text-slate-400 mt-2">
+              <Sparkles size={13} className="text-violet-400" />
+              <span>
+                IA buscou:{' '}
+                <strong className="text-slate-600">
+                  {response.intent.keywords?.join(', ')}
+                </strong>
+                {response.intent.region && (
                   <span>
-                    IA buscou:{' '}
-                    <strong className="text-slate-600">
-                      {response.intent.keywords?.join(', ')}
-                    </strong>
-                    {response.intent.region && (
-                      <span>
-                        {' '}
-                        em <strong className="text-slate-600">{response.intent.region}</strong>
-                      </span>
-                    )}
+                    {' '}em <strong className="text-slate-600">{response.intent.region}</strong>
                   </span>
-                </div>
-              )}
+                )}
+              </span>
             </div>
           )}
         </div>
