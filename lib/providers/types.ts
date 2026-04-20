@@ -22,6 +22,12 @@ export interface SearchResult {
   data_publicacao: string;
   url_original: string;
   relevancia: number; // 0-100, calculado pelo ranker
+
+  // Novos campos Inteligência B2B
+  motivo_recomendacao?: string; // Ex: Alvará Liberado + Contato Mapeado
+  tem_contato?: boolean;
+  tem_alvara?: boolean;
+
   modalidade?: string;
   numero_controle?: string;
   data_abertura?: string;

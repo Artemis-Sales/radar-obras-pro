@@ -219,6 +219,16 @@ export function SearchResultCard({ result, queryOriginal, onSaveLead, isSaved = 
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2 flex-wrap">
             <SourceBadge fonte={result.fonte} />
+            {result.tem_alvara && (
+              <span className="inline-flex items-center gap-1 px-2 py-[2px] bg-red-100 text-red-700 text-[11px] font-bold uppercase rounded-full tracking-wide">
+                <CheckCircle2 size={11} /> Alvará
+              </span>
+            )}
+            {result.tem_contato && (
+              <span className="inline-flex items-center gap-1 px-2 py-[2px] bg-orange-100 text-orange-700 text-[11px] font-bold uppercase rounded-full tracking-wide">
+                <FileText size={11} /> C/ Contato
+              </span>
+            )}
             {result.modalidade && (
               <span className="text-[11px] text-slate-500 font-medium">{result.modalidade}</span>
             )}
@@ -230,6 +240,14 @@ export function SearchResultCard({ result, queryOriginal, onSaveLead, isSaved = 
         <h3 className="text-[15px] font-bold text-slate-800 leading-snug mb-2 line-clamp-2 group-hover:text-emerald-700 transition-colors">
           {result.titulo}
         </h3>
+
+        {/* B2B Motivo Badge */}
+        {result.motivo_recomendacao && result.relevancia > 60 && (
+          <div className="mb-3 inline-flex flex-wrap items-center gap-1.5 bg-emerald-50 border border-emerald-100 text-emerald-800 text-[12px] px-2.5 py-1 rounded-md max-w-full">
+            <Sparkles size={13} className="text-emerald-600 flex-shrink-0" />
+            <span className="font-semibold truncate">{result.motivo_recomendacao}</span>
+          </div>
+        )}
 
         {/* Metadados */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px] text-slate-500 mb-3">

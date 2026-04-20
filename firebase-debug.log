@@ -1,40 +1,37 @@
-[debug] [2026-04-16T13:35:38.622Z] ----------------------------------------------------------------------
-[debug] [2026-04-16T13:35:38.624Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
-[debug] [2026-04-16T13:35:38.624Z] CLI Version:   15.15.0
-[debug] [2026-04-16T13:35:38.624Z] Platform:      win32
-[debug] [2026-04-16T13:35:38.625Z] Node Version:  v24.14.1
-[debug] [2026-04-16T13:35:38.625Z] Time:          Thu Apr 16 2026 10:35:38 GMT-0300 (Horário Padrão de Brasília)
-[debug] [2026-04-16T13:35:38.625Z] ----------------------------------------------------------------------
+[debug] [2026-04-19T21:48:08.664Z] ----------------------------------------------------------------------
+[debug] [2026-04-19T21:48:08.666Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --debug
+[debug] [2026-04-19T21:48:08.666Z] CLI Version:   15.15.0
+[debug] [2026-04-19T21:48:08.667Z] Platform:      win32
+[debug] [2026-04-19T21:48:08.667Z] Node Version:  v24.14.1
+[debug] [2026-04-19T21:48:08.667Z] Time:          Sun Apr 19 2026 18:48:08 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2026-04-19T21:48:08.667Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2026-04-16T13:35:38.627Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
-[debug] [2026-04-16T13:35:43.866Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2026-04-16T13:35:43.867Z] > authorizing via signed-in user (visovalu@gmail.com)
-[debug] [2026-04-16T13:35:43.867Z] [iam] checking project radar-de-obras for permissions ["firebase.projects.get","firebasehosting.sites.update"]
-[debug] [2026-04-16T13:35:43.867Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:43.867Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:43.867Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions [none]
-[debug] [2026-04-16T13:35:43.867Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions  x-goog-user-project=radar-de-obras
-[debug] [2026-04-16T13:35:43.867Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
-[debug] [2026-04-16T13:35:44.189Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
-[debug] [2026-04-16T13:35:44.189Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
-[debug] [2026-04-16T13:35:44.749Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions 200
-[debug] [2026-04-16T13:35:44.749Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
-[debug] [2026-04-16T13:35:44.749Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:44.749Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:44.749Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras [none]
-[debug] [2026-04-16T13:35:45.185Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras 200
-[debug] [2026-04-16T13:35:45.185Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras {"projectId":"radar-de-obras","projectNumber":"1027098254048","displayName":"Radar de Obras","name":"projects/radar-de-obras","resources":{"hostingSite":"radar-de-obras"},"state":"ACTIVE","etag":"1_4034d2dd-6e94-4a0e-98c3-c50c73459446"}
-[debug] [2026-04-16T13:35:48.018Z] defaultcredentials: writing to file C:\Users\User\AppData\Roaming\firebase\visovalu_gmail_com_application_default_credentials.json
-[debug] [2026-04-16T13:35:48.019Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:48.019Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:48.019Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites pageToken=&pageSize=10
-[debug] [2026-04-16T13:35:49.419Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites 200
-[debug] [2026-04-16T13:35:49.419Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites {"sites":[{"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}]}
-[debug] [2026-04-16T13:35:49.419Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:49.419Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:49.419Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config [none]
-[debug] [2026-04-16T13:35:50.414Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config 200
-[debug] [2026-04-16T13:35:50.414Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config {"projectId":"radar-de-obras","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","storageBucket":"radar-de-obras.firebasestorage.app","apiKey":"AIzaSyA-vAfWKcFbubd8T0-qCQTo7sZjiRiHEcI","authDomain":"radar-de-obras.firebaseapp.com","messagingSenderId":"1027098254048","measurementId":"G-6KJ78P7ZC7","projectNumber":"1027098254048","version":"2"}
+[debug] [2026-04-19T21:48:10.083Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-19T21:48:10.083Z] > authorizing via signed-in user (visovalu@gmail.com)
+[debug] [2026-04-19T21:48:10.083Z] [iam] checking project radar-de-obras for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-04-19T21:48:10.084Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:10.084Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:10.085Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions [none]
+[debug] [2026-04-19T21:48:10.085Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:48:10.086Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-04-19T21:48:11.006Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions 200
+[debug] [2026-04-19T21:48:11.006Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-04-19T21:48:11.007Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:11.007Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:11.007Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras [none]
+[debug] [2026-04-19T21:48:11.427Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras 200
+[debug] [2026-04-19T21:48:11.428Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras {"projectId":"radar-de-obras","projectNumber":"1027098254048","displayName":"Radar de Obras","name":"projects/radar-de-obras","resources":{"hostingSite":"radar-de-obras"},"state":"ACTIVE","etag":"1_4034d2dd-6e94-4a0e-98c3-c50c73459446"}
+[debug] [2026-04-19T21:48:13.737Z] defaultcredentials: writing to file C:\Users\User\AppData\Roaming\firebase\visovalu_gmail_com_application_default_credentials.json
+[debug] [2026-04-19T21:48:13.738Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:13.738Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:13.738Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites pageToken=&pageSize=10
+[debug] [2026-04-19T21:48:15.152Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites 200
+[debug] [2026-04-19T21:48:15.152Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites {"sites":[{"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}]}
+[debug] [2026-04-19T21:48:15.152Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:15.152Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:15.152Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config [none]
+[debug] [2026-04-19T21:48:16.365Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config 200
+[debug] [2026-04-19T21:48:16.365Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config {"projectId":"radar-de-obras","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","storageBucket":"radar-de-obras.firebasestorage.app","apiKey":"AIzaSyA-vAfWKcFbubd8T0-qCQTo7sZjiRiHEcI","authDomain":"radar-de-obras.firebaseapp.com","messagingSenderId":"1027098254048","measurementId":"G-6KJ78P7ZC7","projectNumber":"1027098254048","version":"2"}
 [info] 
    Thank you for trying our early preview of Next.js support on Firebase Hosting.
    During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
@@ -46,11 +43,11 @@
 
    We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
 
-[debug] [2026-04-16T13:35:56.790Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:56.790Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:35:56.790Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
-[debug] [2026-04-16T13:35:57.956Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
-[debug] [2026-04-16T13:35:57.957Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
+[debug] [2026-04-19T21:48:21.322Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:21.323Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:21.323Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
+[debug] [2026-04-19T21:48:22.559Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
+[debug] [2026-04-19T21:48:22.559Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
 [info] ▲ Next.js 16.2.1 (Turbopack)
 
 [info] - Environments: .env.local, .env.production, .env
@@ -58,374 +55,44 @@
 
 [info]   Creating an optimized production build ...
 
-[info] ✓ Compiled successfully in 2.9s
-
-[info]   Running TypeScript ...
-
-[info]   Finished TypeScript in 3.2s ...
-
-[info]   Collecting page data using 11 workers ...
-
-[info]   Generating static pages using 11 workers (0/13) ...
-
-[info]   Generating static pages using 11 workers (3/13) 
-
-[info]   Generating static pages using 11 workers (6/13) 
-
-[info]   Generating static pages using 11 workers (9/13) 
-
-[info] ✓ Generating static pages using 11 workers (13/13) in 363ms
-
-[info]   Finalizing page optimization ...
-
 [info] 
 
-[info] Route (app)
-┌ ○ /
-├ ○ /_not-found
-├ ƒ /api/enrich
-├ ƒ /api/insights
-├ ƒ /api/leads/clear-search
-├ ƒ /api/search
-├ ○ /dashboard
-├ ○ /historico
-├ ○ /login
-├ ○ /perfil
-└ ○ /register
-
-
-[info] 
-○  (Static)   prerendered as static content
-ƒ  (Dynamic)  server-rendered on demand
-
-
-[info] Building a Cloud Function to run this application. This is needed due to:
-[info]  • non-static component /api/enrich/route
-[info]  • non-static component /api/insights/route
-[info]  • non-static component /api/leads/clear-search/route
-[info]  • non-static component /api/search/route
-[info] 
-[debug] [2026-04-16T13:36:21.341Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:36:21.341Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:36:21.341Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
-[debug] [2026-04-16T13:36:22.555Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
-[debug] [2026-04-16T13:36:22.556Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
-[debug] [2026-04-16T13:36:23.619Z] Error: EPERM: operation not permitted, symlink 'C:\Projetos\radar-obras-pro\node_modules\firebase-admin' -> 'C:\Projetos\radar-obras-pro\.firebase\radar-de-obras\functions\.next\node_modules\firebase-admin-a14c8a5423a75469'
-[debug] [2026-04-16T13:46:40.168Z] ----------------------------------------------------------------------
-[debug] [2026-04-16T13:46:40.171Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
-[debug] [2026-04-16T13:46:40.171Z] CLI Version:   15.15.0
-[debug] [2026-04-16T13:46:40.171Z] Platform:      win32
-[debug] [2026-04-16T13:46:40.171Z] Node Version:  v24.14.1
-[debug] [2026-04-16T13:46:40.171Z] Time:          Thu Apr 16 2026 10:46:40 GMT-0300 (Horário Padrão de Brasília)
-[debug] [2026-04-16T13:46:40.171Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2026-04-16T13:46:41.600Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2026-04-16T13:46:41.600Z] > authorizing via signed-in user (visovalu@gmail.com)
-[debug] [2026-04-16T13:46:41.601Z] [iam] checking project radar-de-obras for permissions ["firebase.projects.get","firebasehosting.sites.update"]
-[debug] [2026-04-16T13:46:41.602Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:46:41.602Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:46:41.602Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions [none]
-[debug] [2026-04-16T13:46:41.603Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions  x-goog-user-project=radar-de-obras
-[debug] [2026-04-16T13:46:41.603Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
-[debug] [2026-04-16T13:46:42.500Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions 200
-[debug] [2026-04-16T13:46:42.501Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
-[debug] [2026-04-16T13:46:42.501Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:46:42.501Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:46:42.501Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras [none]
-[debug] [2026-04-16T13:46:42.910Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras 200
-[debug] [2026-04-16T13:46:42.911Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras {"projectId":"radar-de-obras","projectNumber":"1027098254048","displayName":"Radar de Obras","name":"projects/radar-de-obras","resources":{"hostingSite":"radar-de-obras"},"state":"ACTIVE","etag":"1_4034d2dd-6e94-4a0e-98c3-c50c73459446"}
-[debug] [2026-04-16T13:46:51.305Z] defaultcredentials: writing to file C:\Users\User\AppData\Roaming\firebase\visovalu_gmail_com_application_default_credentials.json
-[debug] [2026-04-16T13:46:51.307Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:46:51.308Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:46:51.308Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites pageToken=&pageSize=10
-[debug] [2026-04-16T13:46:52.674Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites 200
-[debug] [2026-04-16T13:46:52.675Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites {"sites":[{"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}]}
-[debug] [2026-04-16T13:46:52.675Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:46:52.675Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:46:52.675Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config [none]
-[debug] [2026-04-16T13:46:53.900Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config 200
-[debug] [2026-04-16T13:46:53.900Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config {"projectId":"radar-de-obras","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","storageBucket":"radar-de-obras.firebasestorage.app","apiKey":"AIzaSyA-vAfWKcFbubd8T0-qCQTo7sZjiRiHEcI","authDomain":"radar-de-obras.firebaseapp.com","messagingSenderId":"1027098254048","measurementId":"G-6KJ78P7ZC7","projectNumber":"1027098254048","version":"2"}
-[info] 
-   Thank you for trying our early preview of Next.js support on Firebase Hosting.
-   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
-   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
-
-   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
-   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
-   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
-
-   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
-
-[debug] [2026-04-16T13:47:11.428Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:47:11.428Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:47:11.428Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
-[debug] [2026-04-16T13:47:12.580Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
-[debug] [2026-04-16T13:47:12.580Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
-[info] ▲ Next.js 16.2.1 (Turbopack)
-
-[info] - Environments: .env.local, .env.production, .env
-
-
-[info]   Creating an optimized production build ...
-
-[info] ✓ Compiled successfully in 3.6s
-
-[info]   Running TypeScript ...
-
-[info]   Finished TypeScript in 3.2s ...
-
-[info]   Collecting page data using 11 workers ...
-
-[info]   Generating static pages using 11 workers (0/13) ...
-
-[info]   Generating static pages using 11 workers (3/13) 
-
-[info]   Generating static pages using 11 workers (6/13) 
-
-[info]   Generating static pages using 11 workers (9/13) 
-
-[info] ✓ Generating static pages using 11 workers (13/13) in 447ms
-
-[info]   Finalizing page optimization ...
-
-[info] 
-
-[info] Route (app)
-┌ ○ /
-├ ○ /_not-found
-├ ƒ /api/enrich
-├ ƒ /api/insights
-├ ƒ /api/leads/clear-search
-├ ƒ /api/search
-├ ○ /dashboard
-├ ○ /historico
-├ ○ /login
-├ ○ /perfil
-└ ○ /register
-
-
-[info] 
-○  (Static)   prerendered as static content
-ƒ  (Dynamic)  server-rendered on demand
-
-
-[info] Building a Cloud Function to run this application. This is needed due to:
-[info]  • non-static component /api/enrich/route
-[info]  • non-static component /api/insights/route
-[info]  • non-static component /api/leads/clear-search/route
-[info]  • non-static component /api/search/route
-[info] 
-[debug] [2026-04-16T13:47:40.148Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:47:40.148Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:47:40.148Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
-[debug] [2026-04-16T13:47:41.299Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
-[debug] [2026-04-16T13:47:41.299Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
-[debug] [2026-04-16T13:47:42.336Z] Error: EPERM: operation not permitted, symlink 'C:\Projetos\radar-obras-pro\node_modules\firebase-admin' -> 'C:\Projetos\radar-obras-pro\.firebase\radar-de-obras\functions\.next\node_modules\firebase-admin-a14c8a5423a75469'
-[debug] [2026-04-16T13:52:57.876Z] ----------------------------------------------------------------------
-[debug] [2026-04-16T13:52:57.879Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
-[debug] [2026-04-16T13:52:57.879Z] CLI Version:   15.15.0
-[debug] [2026-04-16T13:52:57.879Z] Platform:      win32
-[debug] [2026-04-16T13:52:57.879Z] Node Version:  v24.14.1
-[debug] [2026-04-16T13:52:57.879Z] Time:          Thu Apr 16 2026 10:52:57 GMT-0300 (Horário Padrão de Brasília)
-[debug] [2026-04-16T13:52:57.880Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2026-04-16T13:52:59.240Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2026-04-16T13:52:59.240Z] > authorizing via signed-in user (visovalu@gmail.com)
-[debug] [2026-04-16T13:52:59.240Z] [iam] checking project radar-de-obras for permissions ["firebase.projects.get","firebasehosting.sites.update"]
-[debug] [2026-04-16T13:52:59.241Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:52:59.241Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:52:59.242Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions [none]
-[debug] [2026-04-16T13:52:59.242Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions  x-goog-user-project=radar-de-obras
-[debug] [2026-04-16T13:52:59.242Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
-[debug] [2026-04-16T13:53:00.150Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions 200
-[debug] [2026-04-16T13:53:00.150Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
-[debug] [2026-04-16T13:53:00.151Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:00.151Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:00.151Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras [none]
-[debug] [2026-04-16T13:53:00.582Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras 200
-[debug] [2026-04-16T13:53:00.582Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras {"projectId":"radar-de-obras","projectNumber":"1027098254048","displayName":"Radar de Obras","name":"projects/radar-de-obras","resources":{"hostingSite":"radar-de-obras"},"state":"ACTIVE","etag":"1_4034d2dd-6e94-4a0e-98c3-c50c73459446"}
-[debug] [2026-04-16T13:53:08.670Z] defaultcredentials: writing to file C:\Users\User\AppData\Roaming\firebase\visovalu_gmail_com_application_default_credentials.json
-[debug] [2026-04-16T13:53:08.673Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:08.673Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:08.673Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites pageToken=&pageSize=10
-[debug] [2026-04-16T13:53:10.038Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites 200
-[debug] [2026-04-16T13:53:10.038Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites {"sites":[{"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}]}
-[debug] [2026-04-16T13:53:10.039Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:10.039Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:10.039Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config [none]
-[debug] [2026-04-16T13:53:11.395Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config 200
-[debug] [2026-04-16T13:53:11.395Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config {"projectId":"radar-de-obras","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","storageBucket":"radar-de-obras.firebasestorage.app","apiKey":"AIzaSyA-vAfWKcFbubd8T0-qCQTo7sZjiRiHEcI","authDomain":"radar-de-obras.firebaseapp.com","messagingSenderId":"1027098254048","measurementId":"G-6KJ78P7ZC7","projectNumber":"1027098254048","version":"2"}
-[info] 
-   Thank you for trying our early preview of Next.js support on Firebase Hosting.
-   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
-   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
-
-   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
-   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
-   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
-
-   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
-
-[debug] [2026-04-16T13:53:24.820Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:24.820Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:24.820Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
-[debug] [2026-04-16T13:53:26.051Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
-[debug] [2026-04-16T13:53:26.051Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
-[info] ▲ Next.js 16.2.1 (Turbopack)
-
-[info] - Environments: .env.local, .env.production, .env
-
-
-[info]   Creating an optimized production build ...
-
-[info] ✓ Compiled successfully in 2.9s
-
-[info]   Running TypeScript ...
-
-[info]   Finished TypeScript in 3.3s ...
-
-[info]   Collecting page data using 11 workers ...
-
-[info]   Generating static pages using 11 workers (0/13) ...
-
-[info]   Generating static pages using 11 workers (3/13) 
-
-[info]   Generating static pages using 11 workers (6/13) 
-
-[info]   Generating static pages using 11 workers (9/13) 
-
-[info] ✓ Generating static pages using 11 workers (13/13) in 360ms
-
-[info]   Finalizing page optimization ...
-
-[info] 
-
-[info] Route (app)
-┌ ○ /
-├ ○ /_not-found
-├ ƒ /api/enrich
-├ ƒ /api/insights
-├ ƒ /api/leads/clear-search
-├ ƒ /api/search
-├ ○ /dashboard
-├ ○ /historico
-├ ○ /login
-├ ○ /perfil
-└ ○ /register
-
-
-
-[info] ○  (Static)   prerendered as static content
-ƒ  (Dynamic)  server-rendered on demand
-
-
-[info] Building a Cloud Function to run this application. This is needed due to:
-[info]  • non-static component /api/enrich/route
-[info]  • non-static component /api/insights/route
-[info]  • non-static component /api/leads/clear-search/route
-[info]  • non-static component /api/search/route
-[info] 
-[debug] [2026-04-16T13:53:50.818Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:50.818Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:53:50.818Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
-[debug] [2026-04-16T13:53:51.953Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
-[debug] [2026-04-16T13:53:51.953Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
-[debug] [2026-04-16T13:53:52.562Z] Error: EPERM: operation not permitted, symlink 'C:\Projetos\radar-obras-pro\node_modules\firebase-admin' -> 'C:\Projetos\radar-obras-pro\.firebase\radar-de-obras\functions\.next\node_modules\firebase-admin-a14c8a5423a75469'
-[debug] [2026-04-16T13:55:03.848Z] ----------------------------------------------------------------------
-[debug] [2026-04-16T13:55:03.851Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --debug
-[debug] [2026-04-16T13:55:03.851Z] CLI Version:   15.15.0
-[debug] [2026-04-16T13:55:03.851Z] Platform:      win32
-[debug] [2026-04-16T13:55:03.851Z] Node Version:  v24.14.1
-[debug] [2026-04-16T13:55:03.851Z] Time:          Thu Apr 16 2026 10:55:03 GMT-0300 (Horário Padrão de Brasília)
-[debug] [2026-04-16T13:55:03.851Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2026-04-16T13:55:05.169Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2026-04-16T13:55:05.169Z] > authorizing via signed-in user (visovalu@gmail.com)
-[debug] [2026-04-16T13:55:05.169Z] [iam] checking project radar-de-obras for permissions ["firebase.projects.get","firebasehosting.sites.update"]
-[debug] [2026-04-16T13:55:05.170Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:05.170Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:05.171Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions [none]
-[debug] [2026-04-16T13:55:05.171Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions  x-goog-user-project=radar-de-obras
-[debug] [2026-04-16T13:55:05.171Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
-[debug] [2026-04-16T13:55:06.026Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions 200
-[debug] [2026-04-16T13:55:06.026Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
-[debug] [2026-04-16T13:55:06.027Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:06.027Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:06.028Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras [none]
-[debug] [2026-04-16T13:55:06.465Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras 200
-[debug] [2026-04-16T13:55:06.465Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras {"projectId":"radar-de-obras","projectNumber":"1027098254048","displayName":"Radar de Obras","name":"projects/radar-de-obras","resources":{"hostingSite":"radar-de-obras"},"state":"ACTIVE","etag":"1_4034d2dd-6e94-4a0e-98c3-c50c73459446"}
-[debug] [2026-04-16T13:55:08.551Z] defaultcredentials: writing to file C:\Users\User\AppData\Roaming\firebase\visovalu_gmail_com_application_default_credentials.json
-[debug] [2026-04-16T13:55:08.552Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:08.552Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:08.553Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites pageToken=&pageSize=10
-[debug] [2026-04-16T13:55:09.859Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites 200
-[debug] [2026-04-16T13:55:09.859Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites {"sites":[{"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}]}
-[debug] [2026-04-16T13:55:09.859Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:09.859Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:09.859Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config [none]
-[debug] [2026-04-16T13:55:11.015Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config 200
-[debug] [2026-04-16T13:55:11.015Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config {"projectId":"radar-de-obras","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","storageBucket":"radar-de-obras.firebasestorage.app","apiKey":"AIzaSyA-vAfWKcFbubd8T0-qCQTo7sZjiRiHEcI","authDomain":"radar-de-obras.firebaseapp.com","messagingSenderId":"1027098254048","measurementId":"G-6KJ78P7ZC7","projectNumber":"1027098254048","version":"2"}
-[info] 
-   Thank you for trying our early preview of Next.js support on Firebase Hosting.
-   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
-   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
-
-   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
-   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
-   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
-
-   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
-
-[debug] [2026-04-16T13:55:15.933Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:15.933Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:15.933Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
-[debug] [2026-04-16T13:55:17.156Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
-[debug] [2026-04-16T13:55:17.156Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
-[info] ▲ Next.js 16.2.1 (Turbopack)
-
-[info] - Environments: .env.local, .env.production, .env
-
-[info] 
-
-[info]   Creating an optimized production build ...
-
-[info] 
-
-[info] [101.93ms] [@tailwindcss/postcss] app\globals.css
+[info] [109.12ms] [@tailwindcss/postcss] app\globals.css
 [  0.07ms]   ↳ Quick bail check
-[ 26.64ms]   ↳ Setup compiler
+[ 25.55ms]   ↳ Setup compiler
 [  0.39ms]     ↳ PostCSS AST -> Tailwind CSS AST
-[ 26.23ms]     ↳ Create compiler
-[  0.22ms]   ↳ Register full rebuild paths
-[  2.03ms]   ↳ Setup scanner
-[ 13.70ms]   ↳ Scan for candidates
-[ 11.85ms]   ↳ Register dependency messages
-[ 29.77ms]   ↳ Build utilities
-[ 15.05ms]   ↳ Optimization
-[  0.62ms]     ↳ AST -> CSS
-[  8.90ms]     ↳ Lightning CSS
-[  5.50ms]     ↳ CSS -> PostCSS AST
-[  2.19ms]   ↳ Update PostCSS AST
+[ 25.14ms]     ↳ Create compiler
+[  0.24ms]   ↳ Register full rebuild paths
+[  1.95ms]   ↳ Setup scanner
+[ 15.72ms]   ↳ Scan for candidates
+[ 14.35ms]   ↳ Register dependency messages
 
-[info] 
+[info] [ 30.94ms]   ↳ Build utilities
+[ 17.19ms]   ↳ Optimization
+[  0.96ms]     ↳ AST -> CSS
+[  9.31ms]     ↳ Lightning CSS
 
-[info] ✓ Compiled successfully in 3.2s
+[info] [  6.89ms]     ↳ CSS -> PostCSS AST
+[  2.70ms]   ↳ Update PostCSS AST
+
+
+[info] ✓ Compiled successfully in 3.1s
 
 [info]   Running TypeScript ...
 
-[info]   Finished TypeScript in 3.2s ...
+[info]   Finished TypeScript in 3.5s ...
 
 [info]   Collecting page data using 11 workers ...
 
-[info]   Generating static pages using 11 workers (0/13) ...
+[info]   Generating static pages using 11 workers (0/17) ...
 
-[info]   Generating static pages using 11 workers (3/13) 
+[info]   Generating static pages using 11 workers (4/17) 
 
-[info]   Generating static pages using 11 workers (6/13) 
+[info]   Generating static pages using 11 workers (8/17) 
 
-[info]   Generating static pages using 11 workers (9/13) 
+[info]   Generating static pages using 11 workers (12/17) 
 
-[info] ✓ Generating static pages using 11 workers (13/13) in 367ms
+[info] ✓ Generating static pages using 11 workers (17/17) in 1119ms
 
 [info]   Finalizing page optimization ...
 
@@ -437,7 +104,11 @@
 ├ ƒ /api/enrich
 ├ ƒ /api/insights
 ├ ƒ /api/leads/clear-search
+├ ƒ /api/leads/save
 ├ ƒ /api/search
+├ ƒ /api/search/analyze
+├ ƒ /api/search/saved
+├ ○ /busca
 ├ ○ /dashboard
 ├ ○ /historico
 ├ ○ /login
@@ -454,11 +125,427 @@
 [info]  • non-static component /api/enrich/route
 [info]  • non-static component /api/insights/route
 [info]  • non-static component /api/leads/clear-search/route
-[info]  • non-static component /api/search/route
+[info]  • non-static component /api/leads/save/route
+[info]  • non-static component /api/search/analyze/route
+[debug] [2026-04-19T21:48:35.472Z]  • non-static component /api/search/route
+[debug] [2026-04-19T21:48:35.472Z]  • non-static component /api/search/saved/route
 [info] 
-[debug] [2026-04-16T13:55:31.938Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:31.938Z] Checked if tokens are valid: true, expires at: 1776348928997
-[debug] [2026-04-16T13:55:31.938Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
-[debug] [2026-04-16T13:55:33.113Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
-[debug] [2026-04-16T13:55:33.114Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
-[debug] [2026-04-16T13:55:33.659Z] Error: EPERM: operation not permitted, symlink 'C:\Projetos\radar-obras-pro\node_modules\firebase-admin' -> 'C:\Projetos\radar-obras-pro\.firebase\radar-de-obras\functions\.next\node_modules\firebase-admin-a14c8a5423a75469'
+[debug] [2026-04-19T21:48:40.693Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:40.694Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:48:40.694Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
+[debug] [2026-04-19T21:48:41.887Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
+[debug] [2026-04-19T21:48:41.887Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
+[debug] [2026-04-19T21:48:42.675Z] Error: EPERM: operation not permitted, symlink 'C:\Projetos\radar-obras-pro\node_modules\firebase-admin' -> 'C:\Projetos\radar-obras-pro\.firebase\radar-de-obras\functions\.next\node_modules\firebase-admin-a14c8a5423a75469'
+[debug] [2026-04-19T21:50:44.339Z] ----------------------------------------------------------------------
+[debug] [2026-04-19T21:50:44.341Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --debug
+[debug] [2026-04-19T21:50:44.341Z] CLI Version:   15.15.0
+[debug] [2026-04-19T21:50:44.341Z] Platform:      win32
+[debug] [2026-04-19T21:50:44.342Z] Node Version:  v24.14.1
+[debug] [2026-04-19T21:50:44.342Z] Time:          Sun Apr 19 2026 18:50:44 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2026-04-19T21:50:44.342Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-19T21:50:45.677Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-19T21:50:45.678Z] > authorizing via signed-in user (visovalu@gmail.com)
+[debug] [2026-04-19T21:50:45.678Z] [iam] checking project radar-de-obras for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-04-19T21:50:45.679Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:45.679Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:45.680Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions [none]
+[debug] [2026-04-19T21:50:45.680Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:50:45.680Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-04-19T21:50:46.546Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions 200
+[debug] [2026-04-19T21:50:46.546Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-04-19T21:50:46.548Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:46.548Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:46.548Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras [none]
+[debug] [2026-04-19T21:50:46.946Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras 200
+[debug] [2026-04-19T21:50:46.946Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/radar-de-obras {"projectId":"radar-de-obras","projectNumber":"1027098254048","displayName":"Radar de Obras","name":"projects/radar-de-obras","resources":{"hostingSite":"radar-de-obras"},"state":"ACTIVE","etag":"1_4034d2dd-6e94-4a0e-98c3-c50c73459446"}
+[debug] [2026-04-19T21:50:49.996Z] defaultcredentials: writing to file C:\Users\User\AppData\Roaming\firebase\visovalu_gmail_com_application_default_credentials.json
+[debug] [2026-04-19T21:50:49.997Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:49.997Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:49.997Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites pageToken=&pageSize=10
+[debug] [2026-04-19T21:50:51.294Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites 200
+[debug] [2026-04-19T21:50:51.294Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites {"sites":[{"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}]}
+[debug] [2026-04-19T21:50:51.294Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:51.294Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:51.294Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config [none]
+[debug] [2026-04-19T21:50:52.415Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config 200
+[debug] [2026-04-19T21:50:52.415Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1027098254048:web:06e76dfdd3e89d9ffcce85/config {"projectId":"radar-de-obras","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","storageBucket":"radar-de-obras.firebasestorage.app","apiKey":"AIzaSyA-vAfWKcFbubd8T0-qCQTo7sZjiRiHEcI","authDomain":"radar-de-obras.firebaseapp.com","messagingSenderId":"1027098254048","measurementId":"G-6KJ78P7ZC7","projectNumber":"1027098254048","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-04-19T21:50:57.216Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:57.216Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:50:57.216Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
+[debug] [2026-04-19T21:50:58.498Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
+[debug] [2026-04-19T21:50:58.498Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
+[info] ▲ Next.js 16.2.1 (Turbopack)
+
+[info] - Environments: .env.local, .env.production, .env
+
+
+[info]   Creating an optimized production build ...
+
+[info] 
+
+[info] [107.34ms] [@tailwindcss/postcss] app\globals.css
+[  0.07ms]   ↳ Quick bail check
+[ 26.14ms]   ↳ Setup compiler
+[  0.38ms]     ↳ PostCSS AST -> Tailwind CSS AST
+[ 25.74ms]     ↳ Create compiler
+[  0.23ms]   ↳ Register full rebuild paths
+[  1.98ms]   ↳ Setup scanner
+[ 15.51ms]   ↳ Scan for candidates
+[ 13.25ms]   ↳ Register dependency messages
+[ 30.91ms]   ↳ Build utilities
+[ 16.50ms]   ↳ Optimization
+[  0.73ms]     ↳ AST -> CSS
+
+[info] [  8.81ms]     ↳ Lightning CSS
+[  6.95ms]     ↳ CSS -> PostCSS AST
+[  2.35ms]   ↳ Update PostCSS AST
+
+
+[info] ✓ Compiled successfully in 3.8s
+
+[info]   Running TypeScript ...
+
+[info]   Finished TypeScript in 3.4s ...
+
+[info]   Collecting page data using 11 workers ...
+
+[info]   Generating static pages using 11 workers (0/17) ...
+
+[info]   Generating static pages using 11 workers (4/17) 
+
+[info]   Generating static pages using 11 workers (8/17) 
+
+[info]   Generating static pages using 11 workers (12/17) 
+
+[info] ✓ Generating static pages using 11 workers (17/17) in 871ms
+
+[info]   Finalizing page optimization ...
+
+[info] 
+
+[info] Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/enrich
+├ ƒ /api/insights
+├ ƒ /api/leads/clear-search
+├ ƒ /api/leads/save
+├ ƒ /api/search
+├ ƒ /api/search/analyze
+├ ƒ /api/search/saved
+├ ○ /busca
+├ ○ /dashboard
+├ ○ /historico
+├ ○ /login
+├ ○ /perfil
+└ ○ /register
+
+
+[info] 
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • non-static component /api/enrich/route
+[info]  • non-static component /api/insights/route
+[info]  • non-static component /api/leads/clear-search/route
+[info]  • non-static component /api/leads/save/route
+[info]  • non-static component /api/search/analyze/route
+[debug] [2026-04-19T21:51:11.466Z]  • non-static component /api/search/route
+[debug] [2026-04-19T21:51:11.466Z]  • non-static component /api/search/saved/route
+[info] 
+[debug] [2026-04-19T21:51:17.396Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:17.397Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:17.397Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras [none]
+[debug] [2026-04-19T21:51:18.576Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras 200
+[debug] [2026-04-19T21:51:18.576Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/radar-de-obras/sites/radar-de-obras {"name":"projects/radar-de-obras/sites/radar-de-obras","defaultUrl":"https://radar-de-obras.web.app","appId":"1:1027098254048:web:06e76dfdd3e89d9ffcce85","type":"DEFAULT_SITE"}
+[debug] [2026-04-19T21:51:28.859Z] [web frameworks] effective firebase.json:  {
+  "hosting": [
+    {
+      "site": "radar-de-obras",
+      "source": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      },
+      "rewrites": [
+        {
+          "source": "**",
+          "function": {
+            "functionId": "ssrradardeobras",
+            "region": "us-central1",
+            "pinTag": true
+          }
+        }
+      ],
+      "redirects": [],
+      "headers": [
+        {
+          "source": "/busca",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/busca/layout,_N_T_/busca/page,_N_T_/busca"
+            }
+          ]
+        },
+        {
+          "source": "/_global-error",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/_global-error/layout,_N_T_/_global-error/page,_N_T_/_global-error"
+            }
+          ]
+        },
+        {
+          "source": "/_not-found",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/_not-found/layout,_N_T_/_not-found/page,_N_T_/_not-found"
+            }
+          ]
+        },
+        {
+          "source": "/favicon.ico",
+          "headers": [
+            {
+              "key": "cache-control",
+              "value": "public, max-age=0, must-revalidate"
+            },
+            {
+              "key": "content-type",
+              "value": "image/x-icon"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/favicon.ico/layout,_N_T_/favicon.ico/route,_N_T_/favicon.ico"
+            }
+          ]
+        },
+        {
+          "source": "/login",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/login/layout,_N_T_/login/page,_N_T_/login"
+            }
+          ]
+        },
+        {
+          "source": "/dashboard",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/dashboard/layout,_N_T_/dashboard/page,_N_T_/dashboard"
+            }
+          ]
+        },
+        {
+          "source": "/perfil",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/perfil/layout,_N_T_/perfil/page,_N_T_/perfil"
+            }
+          ]
+        },
+        {
+          "source": "/historico",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/historico/layout,_N_T_/historico/page,_N_T_/historico"
+            }
+          ]
+        },
+        {
+          "source": "/register",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/register/layout,_N_T_/register/page,_N_T_/register"
+            }
+          ]
+        },
+        {
+          "source": "**/*.[jt]s",
+          "headers": [
+            {
+              "key": "Set-Cookie",
+              "value": "__FIREBASE_DEFAULTS__=eyJjb25maWciOnsicHJvamVjdElkIjoicmFkYXItZGUtb2JyYXMiLCJhcHBJZCI6IjE6MTAyNzA5ODI1NDA0ODp3ZWI6MDZlNzZkZmRkM2U4OWQ5ZmZjY2U4NSIsInN0b3JhZ2VCdWNrZXQiOiJyYWRhci1kZS1vYnJhcy5maXJlYmFzZXN0b3JhZ2UuYXBwIiwiYXBpS2V5IjoiQUl6YVN5QS12QWZXS2NGYnViZDhUMC1xQ1FUbzdzWmppUmlIRWNJIiwiYXV0aERvbWFpbiI6InJhZGFyLWRlLW9icmFzLmZpcmViYXNlYXBwLmNvbSIsIm1lc3NhZ2luZ1NlbmRlcklkIjoiMTAyNzA5ODI1NDA0OCIsIm1lYXN1cmVtZW50SWQiOiJHLTZLSjc4UDdaQzciLCJwcm9qZWN0TnVtYmVyIjoiMTAyNzA5ODI1NDA0OCIsInZlcnNpb24iOiIyIn0sIl9hdXRoVG9rZW5TeW5jVVJMIjoiL19fc2Vzc2lvbiJ9; SameSite=Strict; Expires=2028-03-14T08:31:28.859Z; Path=/;"
+            }
+          ]
+        }
+      ],
+      "cleanUrls": true,
+      "trailingSlash": false,
+      "public": ".firebase\\radar-de-obras\\hosting",
+      "webFramework": "next_ssr"
+    }
+  ],
+  "functions": [
+    {
+      "source": ".firebase\\radar-de-obras\\functions",
+      "codebase": "firebase-frameworks-radar-de-obras"
+    }
+  ]
+}
+[debug] [2026-04-19T21:51:28.859Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-19T21:51:28.860Z] > authorizing via signed-in user (visovalu@gmail.com)
+[debug] [2026-04-19T21:51:28.860Z] [iam] checking project radar-de-obras for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2026-04-19T21:51:28.860Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:28.860Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:28.860Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions [none]
+[debug] [2026-04-19T21:51:28.860Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:51:28.860Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2026-04-19T21:51:29.692Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions 200
+[debug] [2026-04-19T21:51:29.692Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[info] 
+[info] === Deploying to 'radar-de-obras'...
+[info] 
+[info] i  deploying functions, hosting 
+[debug] [2026-04-19T21:51:29.694Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:29.694Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:29.694Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudresourcemanager.googleapis.com [none]
+[debug] [2026-04-19T21:51:29.694Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudresourcemanager.googleapis.com  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:51:30.732Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudresourcemanager.googleapis.com 200
+[debug] [2026-04-19T21:51:30.732Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudresourcemanager.googleapis.com [omitted]
+[debug] [2026-04-19T21:51:30.747Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:30.747Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:30.747Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras [none]
+[debug] [2026-04-19T21:51:30.941Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras 200
+[debug] [2026-04-19T21:51:30.942Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/radar-de-obras {"projectNumber":"1027098254048","projectId":"radar-de-obras","lifecycleState":"ACTIVE","name":"Radar de Obras","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2026-03-25T23:56:54.060Z"}
+[info] i  functions: preparing codebase firebase-frameworks-radar-de-obras for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[debug] [2026-04-19T21:51:30.943Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:30.943Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:30.943Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:30.943Z] Checked if tokens are valid: true, expires at: 1776637468008
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[debug] [2026-04-19T21:51:30.943Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:30.943Z] Checked if tokens are valid: true, expires at: 1776637468008
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2026-04-19T21:51:30.943Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:30.944Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:30.944Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudfunctions.googleapis.com [none]
+[debug] [2026-04-19T21:51:30.944Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudfunctions.googleapis.com  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:51:30.944Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/runtimeconfig.googleapis.com [none]
+[debug] [2026-04-19T21:51:30.944Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/runtimeconfig.googleapis.com  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:51:30.945Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudbuild.googleapis.com [none]
+[debug] [2026-04-19T21:51:30.945Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudbuild.googleapis.com  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:51:30.946Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/artifactregistry.googleapis.com [none]
+[debug] [2026-04-19T21:51:30.946Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/artifactregistry.googleapis.com  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:51:31.852Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudfunctions.googleapis.com 200
+[debug] [2026-04-19T21:51:31.852Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudfunctions.googleapis.com [omitted]
+[warn] !  functions: missing required API cloudfunctions.googleapis.com. Enabling now... 
+[debug] [2026-04-19T21:51:31.853Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:31.853Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:31.853Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudfunctions.googleapis.com:enable [none]
+[debug] [2026-04-19T21:51:31.853Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudfunctions.googleapis.com:enable  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:51:31.890Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudbuild.googleapis.com 200
+[debug] [2026-04-19T21:51:31.890Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudbuild.googleapis.com [omitted]
+[warn] !  functions: missing required API cloudbuild.googleapis.com. Enabling now... 
+[debug] [2026-04-19T21:51:31.890Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:31.890Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:31.890Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudbuild.googleapis.com:enable [none]
+[debug] [2026-04-19T21:51:31.890Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudbuild.googleapis.com:enable  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:51:31.895Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/artifactregistry.googleapis.com 200
+[debug] [2026-04-19T21:51:31.895Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/artifactregistry.googleapis.com [omitted]
+[warn] !  artifactregistry: missing required API artifactregistry.googleapis.com. Enabling now... 
+[debug] [2026-04-19T21:51:31.895Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:31.895Z] Checked if tokens are valid: true, expires at: 1776637468008
+[debug] [2026-04-19T21:51:31.895Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/artifactregistry.googleapis.com:enable [none]
+[debug] [2026-04-19T21:51:31.895Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/artifactregistry.googleapis.com:enable  x-goog-user-project=radar-de-obras
+[debug] [2026-04-19T21:51:31.936Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/runtimeconfig.googleapis.com 200
+[debug] [2026-04-19T21:51:31.937Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2026-04-19T21:51:32.205Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/artifactregistry.googleapis.com:enable 400
+[debug] [2026-04-19T21:51:32.205Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/artifactregistry.googleapis.com:enable [omitted]
+[debug] [2026-04-19T21:51:32.250Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudbuild.googleapis.com:enable 400
+[debug] [2026-04-19T21:51:32.250Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/radar-de-obras/services/cloudbuild.googleapis.com:enable [omitted]
+[error] 
+[error] Error: Your project radar-de-obras must be on the Blaze (pay-as-you-go) plan to complete this command. Required API artifactregistry.googleapis.com can't be enabled until the upgrade is complete. To upgrade, visit the following URL:
+
+https://console.firebase.google.com/project/radar-de-obras/usage/details

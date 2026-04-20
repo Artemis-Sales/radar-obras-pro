@@ -146,81 +146,96 @@ function rankResults(results: SearchResult[], intent: ParsedIntent): SearchResul
   if (results.length === 0) return [];
 
   return results
-    .map(r => ({
-      ...r,
-      relevancia: calculateHeuristicScore(r, intent),
-    }))
+    .map(r => {
+      const { score, motivo } = calculateHeuristicScore(r, intent);
+      return {
+        ...r,
+        relevancia: score,
+        motivo_recomendacao: motivo
+      };
+    })
     .sort((a, b) => b.relevancia - a.relevancia);
 }
 
-/** Pontuação heurística de relevância (0-100) */
-function calculateHeuristicScore(result: SearchResult, intent: ParsedIntent): number {
-  let score = 40;
+/** Pontuação heurística de relevância focada em B2B Oportunidades */
+function calculateHeuristicScore(result: SearchResult, intent: ParsedIntent): { score: number, motivo: string } {
+  let score = 0;
+  const motivos: string[] = [];
 
   const tituloLower = result.titulo.toLowerCase();
   const descLower = (result.descricao || '').toLowerCase();
   const fullText = tituloLower + ' ' + descLower;
+  const empresaLower = (result.empresa || result.orgao || '').toLowerCase();
 
-  // +20 para cada keyword encontrada no título (max +60)
-  let keywordHits = 0;
-  for (const kw of intent.keywords) {
-    const kwLower = kw.toLowerCase();
-    if (tituloLower.includes(kwLower)) {
-      keywordHits++;
-      score += 20;
-    } else if (descLower.includes(kwLower)) {
-      keywordHits++;
-      score += 10;
+  // 1. Já possui Alvará / Licença (🔴 +50 Muito Alto)
+  // Assumes that `tem_alvara` is set by local.ts or inferred here
+  const ehPrivada = result.fonte === 'DOE-SP' || result.fonte === 'CETESB';
+  const temAlvaraText = fullText.includes('alvará') || fullText.includes('aprovado') || fullText.includes('prévia');
+  
+  if (result.tem_alvara || (ehPrivada && temAlvaraText)) {
+    score += 50;
+    motivos.push('Alvará/Liberação confirmada');
+  }
+
+  // 2. Construtora Alvo (🔴 +50 Muito Alto)
+  // Target Constructor match
+  if (intent.keywords.length > 0) {
+    let constructorMatch = false;
+    for (const kw of intent.keywords) {
+      if (kw !== 'sp' && kw !== 'obra' && empresaLower.includes(kw.toLowerCase())) {
+        constructorMatch = true;
+        break;
+      }
+    }
+    if (constructorMatch) {
+      score += 50;
+      motivos.push('Construtora procurada mapeada');
     }
   }
 
-  // Bonus se TODAS as keywords deram match
-  if (intent.keywords.length > 1 && keywordHits === intent.keywords.length) {
-    score += 15;
+  // 3. Tem Contato (🟠 +30 Alto)
+  if (result.tem_contato) {
+    score += 30;
+    motivos.push('Possui contato mapeado');
   }
 
-  // +15 se a cidade bate exatamente com a região buscada
+  // 4. Obra de Grande Porte (🟡 +15 Médio)
+  // Includes keywords for large private developments
+  const largeScaleKeywords = ['loteamento', 'condomínio', 'hospital', 'shopping', 'galpão', 'logístico', 'térreo', 'torre', 'pavimentos'];
+  const isLargeScale = largeScaleKeywords.some(k => fullText.includes(k));
+  if (isLargeScale || (result.valor_estimado && result.valor_estimado > 1000000)) {
+    score += 15;
+    motivos.push('Obra de grande porte');
+  }
+
+  // 5. Match de Cidade/Região (+10 Bonus)
   if (intent.region) {
     const regionLower = intent.region.toLowerCase();
     const cidadeLower = result.cidade.toLowerCase();
-    if (cidadeLower === regionLower) {
-      score += 15;
-    } else if (cidadeLower.includes(regionLower) || regionLower.includes(cidadeLower)) {
+    if (cidadeLower === regionLower || cidadeLower.includes(regionLower)) {
       score += 10;
     }
   }
 
-  // +10 se UF bate
-  if (intent.uf && result.uf === intent.uf) {
-    score += 10;
-  }
-
-  // +5 se tem valor estimado (dado mais rico para decisão)
-  if (result.valor_estimado && result.valor_estimado > 0) {
-    score += 5;
-  }
-
-  // +5 se tem link direto do sistema de origem (não apenas PNCP)
-  if (result.url_original && !result.url_original.includes('pncp.gov.br/app/editais')) {
-    score += 5;
-  }
-
-  // +3 se é publicação recente (últimos 7 dias)
-  try {
-    const pubDate = new Date(result.data_publicacao);
-    const diffDays = (Date.now() - pubDate.getTime()) / (1000 * 60 * 60 * 24);
-    if (diffDays <= 7) score += 3;
-  } catch {}
-
-  // +5 se tipo de obra bate com tipo buscado
-  if (intent.tipo_obra) {
-    const tipoLower = intent.tipo_obra.toLowerCase();
-    if (fullText.includes(tipoLower)) {
-      score += 5;
+  // Penalização drástica: PNCP (Público Genérico) de fora de SP
+  if (result.fonte === 'PNCP') {
+    if (result.uf !== 'SP') {
+      score -= 30; // Despriorizar lixo estatal de fora
+    } else {
+      score += 10; // Bônus base PNCP_SP
     }
   }
 
-  return Math.min(100, Math.max(0, score));
+  // Fallback reason if it's PNCP SP but no strong b2b tags
+  if (motivos.length === 0) {
+    if (result.fonte === 'PNCP') motivos.push('Licitação Governamental (SP)');
+    else motivos.push('Encontrado por similaridade');
+  }
+
+  return {
+    score: Math.min(100, Math.max(0, score)),
+    motivo: motivos.join(' + ')
+  };
 }
 
 // ============================================================
@@ -272,10 +287,10 @@ export async function POST(req: Request) {
     // 1. Parse da intenção (com cache — 0 chamadas Gemini se repetida)
     const intent = await parseIntent(query);
 
-    // 2. Montar filtros finais
+    // 2. Montar filtros finais e forçar SP
     const filters: SearchFilters = {
       dias: clientFilters?.dias || 30,
-      uf: clientFilters?.uf || intent.uf || undefined,
+      uf: 'SP', // FORÇANDO B2B ESTADO SP
       valor_min: clientFilters?.valor_min || intent.valor_min || undefined,
       valor_max: clientFilters?.valor_max || intent.valor_max || undefined,
       fontes: clientFilters?.fontes || undefined,
