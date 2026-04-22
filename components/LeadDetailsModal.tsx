@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Lead } from '@/hooks/useLeads';
-import { X, Calendar, MapPin, Building, Activity, FileText, Globe, Phone, Sparkles, Loader2 } from 'lucide-react';
+import { Lead, deleteLead } from '@/hooks/useLeads';
+import { X, Calendar, MapPin, Building, Activity, FileText, Globe, Phone, Sparkles, Loader2, Trash2 } from 'lucide-react';
 
 interface LeadDetailsModalProps {
   lead: Lead | null;
@@ -10,6 +10,7 @@ interface LeadDetailsModalProps {
 export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
   const [enriching, setEnriching] = useState(false);
   const [enrichError, setEnrichError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   if (!lead) return null;
 
@@ -168,7 +169,22 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
           </div>
         </div>
         
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+        <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-between items-center">
+          <button 
+            onClick={async () => {
+              if (confirm('Tem certeza que deseja excluir permanentemente esta captação?')) {
+                setIsDeleting(true);
+                const success = await deleteLead(lead.id);
+                if (success) onClose();
+                setIsDeleting(false);
+              }
+            }}
+            disabled={isDeleting}
+            className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 font-medium rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+          >
+            {isDeleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+            Excluir Obra
+          </button>
           <button 
             onClick={onClose}
             className="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-lg transition-colors cursor-pointer"

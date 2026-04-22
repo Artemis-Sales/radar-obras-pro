@@ -36,6 +36,18 @@ export const updateLeadStage = async (leadId: string, novoEstagio: string) => {
   }
 };
 
+export const deleteLead = async (leadId: string) => {
+  try {
+    const { deleteDoc } = await import('firebase/firestore');
+    const leadRef = doc(db, 'leads', leadId);
+    await deleteDoc(leadRef);
+    return true;
+  } catch (error) {
+    console.error("Erro ao deletar lead:", error);
+    return false;
+  }
+};
+
 export function useLeads() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);

@@ -77,7 +77,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 sm:text-sm border-slate-200 rounded-xl bg-slate-50/50 py-3 transition-colors hover:bg-white"
+                  className="focus:ring-emerald-500 text-slate-900 font-medium focus:border-emerald-500 block w-full pl-10 sm:text-sm border-slate-200 rounded-xl bg-white py-3 transition-colors hover:bg-slate-50"
                   placeholder="exemplo@incorporadora.com"
                 />
               </div>
@@ -99,7 +99,7 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 sm:text-sm border-slate-200 rounded-xl bg-slate-50/50 py-3 transition-colors hover:bg-white"
+                  className="focus:ring-emerald-500 text-slate-900 font-medium focus:border-emerald-500 block w-full pl-10 sm:text-sm border-slate-200 rounded-xl bg-white py-3 transition-colors hover:bg-slate-50"
                   placeholder="••••••••"
                 />
               </div>

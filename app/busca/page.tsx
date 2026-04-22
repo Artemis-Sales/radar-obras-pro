@@ -162,7 +162,18 @@ export default function BuscaPage() {
   };
 
   const handleSaveLead = async (result: SearchResultData) => {
+    // Adiciona instantaneamente à UI (Optimistic Update)
     setSavedIds((prev) => new Set(prev).add(result.id));
+
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead: result }),
+      });
+    } catch (err) {
+      console.error('Falha ao enviar lead para o Kanban', err);
+    }
   };
 
   // Re-executar busca quando filtros mudam
