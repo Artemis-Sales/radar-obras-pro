@@ -102,7 +102,7 @@ export default function BuscaPage() {
       // Small delay to ensure state is set
       setTimeout(() => performSearch(q), 100);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const performSearch = useCallback(
@@ -136,7 +136,7 @@ export default function BuscaPage() {
           // Salvar no histórico local
           setSearchHistory((prev) => {
             const updated = [q, ...prev.filter((h) => h !== q)].slice(0, 10);
-            try { localStorage.setItem('search_history', JSON.stringify(updated)); } catch {}
+            try { localStorage.setItem('search_history', JSON.stringify(updated)); } catch { }
             return updated;
           });
         } else {
@@ -196,7 +196,7 @@ export default function BuscaPage() {
     try {
       const stored = localStorage.getItem('search_history');
       if (stored) setSearchHistory(JSON.parse(stored));
-    } catch {}
+    } catch { }
   }, []);
 
   const hasResults = response && response.results.length > 0;
@@ -209,8 +209,8 @@ export default function BuscaPage() {
         {showHero && (
           <div className="flex flex-col items-center justify-center py-16 animate-in fade-in duration-500">
             <div className="relative mb-8">
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full blur-3xl opacity-10 scale-150" />
-              <div className="relative bg-gradient-to-br from-emerald-500 to-emerald-600 w-20 h-20 rounded-3xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+              <div className="absolute inset-0 bg-linear-to-r from-emerald-400 to-blue-500 rounded-full blur-3xl opacity-10 scale-150" />
+              <div className="relative bg-linear-to-br from-emerald-500 to-emerald-600 w-20 h-20 rounded-3xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
                 <Search size={36} className="text-white" />
               </div>
             </div>
@@ -430,15 +430,14 @@ export default function BuscaPage() {
                   .map(([source, count]) => (
                     <span
                       key={source}
-                      className={`px-2 py-0.5 rounded-full font-semibold ${
-                        source === 'PNCP'
+                      className={`px-2 py-0.5 rounded-full font-semibold ${source === 'PNCP'
                           ? 'bg-blue-50 text-blue-600'
                           : source === 'DOE-SP'
                             ? 'bg-amber-50 text-amber-600'
                             : source === 'CETESB'
                               ? 'bg-green-50 text-green-600'
                               : 'bg-purple-50 text-purple-600'
-                      }`}
+                        }`}
                     >
                       {source}: {count}
                     </span>

@@ -46,14 +46,14 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
             <Building className="text-emerald-500" />
             Detalhes da Captação
           </h2>
-          <button 
+          <button
             onClick={onClose}
             className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
           >
             <X size={20} />
           </button>
         </div>
-        
+
         <div className="p-6 overflow-y-auto flex-1 flex flex-col gap-6">
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>
@@ -80,7 +80,7 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
               </span>
               <p className="font-medium text-slate-800">{lead.construtora}</p>
             </div>
-            
+
             <div className="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl border border-slate-100 transition-colors">
               <span className="text-xs font-bold text-slate-500 uppercase flex items-center gap-1 mb-1">
                 <Calendar size={14} /> Descoberta em
@@ -103,20 +103,20 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-violet-50 to-emerald-50 p-4 rounded-xl border border-violet-100">
+          <div className="bg-linear-to-br from-violet-50 to-emerald-50 p-4 rounded-xl border border-violet-100">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold text-violet-700 uppercase flex items-center gap-1">
                 <Sparkles size={14} /> Dados da Empresa (via IA & Places)
               </span>
-              
+
               {!lead.enrichedData && (
-                 <button 
-                  onClick={handleEnrich} 
+                <button
+                  onClick={handleEnrich}
                   disabled={enriching || lead.construtora === 'Não identificada' || lead.construtora === 'A identificar'}
                   className="flex items-center gap-1.5 px-3 py-1 bg-violet-600 hover:bg-violet-700 disabled:bg-violet-300 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
-                 >
-                   {enriching ? <><Loader2 size={12} className="animate-spin" /> Buscando...</> : 'Enriquecer Agora'}
-                 </button>
+                >
+                  {enriching ? <><Loader2 size={12} className="animate-spin" /> Buscando...</> : 'Enriquecer Agora'}
+                </button>
               )}
             </div>
 
@@ -126,13 +126,13 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
               <div className="flex flex-col gap-2 text-sm">
                 {lead.enrichedData.website && (
                   <div className="flex items-center gap-2 text-slate-700">
-                    <Globe size={16} className="text-violet-500" /> 
+                    <Globe size={16} className="text-violet-500" />
                     <a href={lead.enrichedData.website} target="_blank" rel="noreferrer" className="text-violet-600 hover:underline font-medium">{lead.enrichedData.website}</a>
                   </div>
                 )}
                 {lead.enrichedData.phone && (
                   <div className="flex items-center gap-2 text-slate-700">
-                    <Phone size={16} className="text-emerald-500" /> 
+                    <Phone size={16} className="text-emerald-500" />
                     <span className="font-medium">{lead.enrichedData.phone}</span>
                   </div>
                 )}
@@ -147,7 +147,7 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
               </div>
             ) : (
               <p className="text-xs text-slate-500">
-                Ainda não foram buscados dados avançados como site e telefone estruturado para esta construtora. 
+                Ainda não foram buscados dados avançados como site e telefone estruturado para esta construtora.
                 {lead.construtora === 'Não identificada' ? ' (Nome da construtora é obrigatório).' : ''}
               </p>
             )}
@@ -168,9 +168,9 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
             )}
           </div>
         </div>
-        
+
         <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-between items-center">
-          <button 
+          <button
             onClick={async () => {
               if (confirm('Tem certeza que deseja excluir permanentemente esta captação?')) {
                 setIsDeleting(true);
@@ -185,7 +185,7 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
             {isDeleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
             Excluir Obra
           </button>
-          <button 
+          <button
             onClick={onClose}
             className="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-lg transition-colors cursor-pointer"
           >
