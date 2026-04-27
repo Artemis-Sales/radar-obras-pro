@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, User, LogOut, Settings } from 'lucide-react';
+import { Bell, User, LogOut, Settings } from 'lucide-react';
 import { useAuth } from '@/lib/context/AuthContext';
 import { auth, db } from '@/lib/firebase/config';
 import { signOut } from 'firebase/auth';
@@ -64,14 +64,7 @@ export function Header() {
 
   return (
     <header className="h-20 bg-white/70 backdrop-blur-lg border-b border-slate-200 flex items-center justify-between px-8 z-50 sticky top-0">
-      <div className="flex bg-slate-100/80 rounded-full px-4 py-2 w-96 items-center gap-2 focus-within:ring-2 focus-within:ring-emerald-400 transition-all">
-        <Search className="text-slate-400" size={18} />
-        <input 
-          type="text" 
-          placeholder="Buscar construtora ou obra..." 
-          className="bg-transparent border-none outline-none text-sm w-full placeholder:text-slate-400 text-slate-700"
-        />
-      </div>
+      <div className="flex-1" />
       <div className="flex items-center gap-5">
         <div className="relative">
           <button 
