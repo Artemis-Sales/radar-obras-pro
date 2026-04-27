@@ -5,11 +5,16 @@
 
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { validateRequest, unauthorizedResponse } from '@/lib/auth/validateRequest';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export async function POST(req: Request) {
   try {
+    // Auth guard
+    const user = await validateRequest(req);
+    if (!user) return unauthorizedResponse();
+
     const body = await req.json();
     const { resultado, queryOriginal } = body;
 

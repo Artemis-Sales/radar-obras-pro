@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lead, deleteLead } from '@/hooks/useLeads';
+import { authFetch } from '@/lib/authFetch';
 import { X, Calendar, MapPin, Building, Activity, FileText, Globe, Phone, Sparkles, Loader2, Trash2 } from 'lucide-react';
 
 interface LeadDetailsModalProps {
@@ -18,7 +19,7 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
     setEnriching(true);
     setEnrichError(null);
     try {
-      const res = await fetch('/api/enrich', {
+      const res = await authFetch('/api/enrich', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -31,7 +32,7 @@ export function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
       if (!data.success) {
         setEnrichError(data.error || 'Falha ao enriquecer.');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setEnrichError('Erro de conexão ao enriquecer dados.');
     } finally {
       setEnriching(false);

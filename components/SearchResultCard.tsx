@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { authFetch } from '@/lib/authFetch';
 import {
   Building2,
   MapPin,
@@ -69,6 +70,11 @@ function SourceBadge({ fonte }: { fonte: string }) {
       bg: 'bg-green-100',
       text: 'text-green-800',
       icon: <Zap size={12} />,
+    },
+    QD: {
+      bg: 'bg-violet-100',
+      text: 'text-violet-800',
+      icon: <FileText size={12} />,
     },
     Places: {
       bg: 'bg-purple-100',
@@ -153,7 +159,7 @@ export function SearchResultCard({ result, queryOriginal, onSaveLead, isSaved = 
     setAnalyzeError(null);
 
     try {
-      const res = await fetch('/api/search/analyze', {
+      const res = await authFetch('/api/search/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resultado: result, queryOriginal }),
@@ -180,7 +186,7 @@ export function SearchResultCard({ result, queryOriginal, onSaveLead, isSaved = 
     setSaveMessage(null);
 
     try {
-      const res = await fetch('/api/leads/save', {
+      const res = await authFetch('/api/leads/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resultado: result }),

@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
+import { validateRequest, unauthorizedResponse } from '@/lib/auth/validateRequest';
 
 export async function POST(request: Request) {
   try {
+    // Auth guard
+    const user = await validateRequest(request);
+    if (!user) return unauthorizedResponse();
+
     const body = await request.json();
     const { lead } = body;
 
@@ -21,23 +26,24 @@ export async function POST(request: Request) {
       urlOrigem: lead.url_original || null,
       textoBruto: lead.descricao || '',
       criadoEm: new Date(),
-      lat: -23.5505 + (Math.random() * 0.02 - 0.01), // Approximate SP coords so they appear on the map immediately
-      lng: -46.6333 + (Math.random() * 0.02 - 0.01),
+      // BUG FIX: Do NOT generate random coordinates. Use null and geocode later.
+      lat: null,
+      lng: null,
       enrichedData: {
         summary: lead.motivo_recomendacao || '',
-      }
+      },
+      savedByUserId: user.uid,
     };
 
-    // Use a predictable ID or generate a new one
-    // We prefix with 'saved_' to ensure it doesn't collide improperly if needed,
-    // but using the existing ID allows us to prevent duplicates.
+    // Use a predictable ID to prevent duplicates.
     const docId = lead.id.toString().replace(/[^a-zA-Z0-9_]/g, '_');
     
     await adminDb.collection('leads').doc(docId).set(leadData, { merge: true });
 
     return NextResponse.json({ success: true, id: docId });
-  } catch (error) {
-    console.error('Error saving lead to Kanban:', error);
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Error saving lead to Kanban:', msg);
     return NextResponse.json({ error: 'Failed to save lead' }, { status: 500 });
   }
 }

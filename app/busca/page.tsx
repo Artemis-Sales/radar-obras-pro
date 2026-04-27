@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { authFetch } from '@/lib/authFetch';
 import { useSearchParams } from 'next/navigation';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { SearchResultCard } from '@/components/SearchResultCard';
@@ -18,6 +19,7 @@ import {
   Sparkles,
   Info,
   CheckCircle2,
+  Newspaper,
 } from 'lucide-react';
 
 interface SearchResultData {
@@ -89,7 +91,7 @@ export default function BuscaPage() {
     dias: 30,
     valor_min: '',
     valor_max: '',
-    fontes: ['PNCP', 'DOE-SP', 'CETESB'],
+    fontes: ['PNCP', 'DOE-SP', 'CETESB', 'QD'],
   });
   const hasAutoSearched = useRef(false);
 
@@ -114,7 +116,7 @@ export default function BuscaPage() {
       setError(null);
 
       try {
-        const res = await fetch('/api/search', {
+        const res = await authFetch('/api/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -166,7 +168,7 @@ export default function BuscaPage() {
     setSavedIds((prev) => new Set(prev).add(result.id));
 
     try {
-      await fetch('/api/leads', {
+      await authFetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lead: result }),
@@ -219,8 +221,8 @@ export default function BuscaPage() {
               Encontre Obras em Todo o Brasil
             </h1>
             <p className="text-slate-500 text-center max-w-lg mb-10 text-[15px] leading-relaxed">
-              Busca inteligente em licitações do PNCP, Diário Oficial e CETESB.
-              Resultados reais com valores, prazos e links diretos para os editais.
+              Busca inteligente em licitações do PNCP, Diário Oficial, CETESB e
+              Diários Municipais. Resultados reais com valores, prazos e links diretos.
             </p>
 
             {/* Fontes de dados */}
@@ -236,6 +238,10 @@ export default function BuscaPage() {
               <span className="flex items-center gap-1.5">
                 <Zap size={14} className="text-green-400" />
                 CETESB
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Newspaper size={14} className="text-violet-400" />
+                Querido Diário
               </span>
             </div>
           </div>
@@ -392,6 +398,9 @@ export default function BuscaPage() {
               </span>
               <span className="flex items-center gap-1">
                 <Zap size={12} className="text-green-400" /> CETESB
+              </span>
+              <span className="flex items-center gap-1">
+                <Newspaper size={12} className="text-violet-400" /> Diários Municipais
               </span>
             </div>
           </div>

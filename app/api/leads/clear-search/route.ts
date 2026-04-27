@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
+import { validateRequest, unauthorizedResponse } from '@/lib/auth/validateRequest';
 
-export async function DELETE() {
+export async function DELETE(req: Request) {
   try {
+    // Auth guard
+    const user = await validateRequest(req);
+    if (!user) return unauthorizedResponse();
+
     const leadsRef = adminDb.collection('leads');
     const snapshot = await leadsRef.where('fonteOriginal', '==', 'Busca Ativa (Places)').get();
 
@@ -18,8 +23,9 @@ export async function DELETE() {
     await batch.commit();
 
     return NextResponse.json({ success: true, count: snapshot.size, message: `Foram excluídos ${snapshot.size} leads com sucesso.` });
-  } catch (error: any) {
-    console.error('Erro ao limpar leads:', error);
-    return NextResponse.json({ success: false, error: error.message || 'Erro ao deletar leads' }, { status: 500 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Erro ao limpar leads:', msg);
+    return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }

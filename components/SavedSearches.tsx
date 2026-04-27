@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { authFetch } from '@/lib/authFetch';
 import {
   BookmarkPlus,
   Bookmark,
@@ -46,7 +47,7 @@ export function SavedSearches({
   const fetchSavedSearches = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/search/saved');
+      const res = await authFetch('/api/search/saved');
       const data = await res.json();
       if (data.success) {
         setSearches(data.searches);
@@ -70,7 +71,7 @@ export function SavedSearches({
     setSaveMessage(null);
 
     try {
-      const res = await fetch('/api/search/saved', {
+      const res = await authFetch('/api/search/saved', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -98,7 +99,7 @@ export function SavedSearches({
   // Remover busca salva
   const handleDelete = async (id: string) => {
     try {
-      await fetch(`/api/search/saved?id=${id}`, { method: 'DELETE' });
+      await authFetch(`/api/search/saved?id=${id}`, { method: 'DELETE' });
       setSearches((prev) => prev.filter((s) => s.id !== id));
     } catch {
       // silently fail

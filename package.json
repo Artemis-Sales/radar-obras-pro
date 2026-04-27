@@ -1,6 +1,6 @@
 {
   "name": "radar-obras-pro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "engines": {
     "node": "22"
@@ -10,7 +10,6 @@
     "prebuild": "node -e \"const fs = require('fs'); if(fs.existsSync('.env.local')) fs.copyFileSync('.env.local', '.env');\"",
     "prebuild:prod": "node -e \"const fs = require('fs'); if(fs.existsSync('.env.production')) fs.copyFileSync('.env.production', '.env');\"",
     "build": "next build",
-    "build:firebase": "npm run prebuild:prod && firebase deploy --only hosting",
     "start": "next start",
     "lint": "eslint",
     "scraper": "node scripts/run-all.mjs",
@@ -27,7 +26,6 @@
     "firebase-admin": "^13.7.0",
     "lucide-react": "^1.7.0",
     "next": "16.2.1",
-    "puppeteer": "^24.40.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
@@ -39,6 +37,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "puppeteer": "^24.40.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

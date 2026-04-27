@@ -5,9 +5,14 @@
 
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
+import { validateRequest, unauthorizedResponse } from '@/lib/auth/validateRequest';
 
 export async function POST(req: Request) {
   try {
+    // Auth guard
+    const user = await validateRequest(req);
+    if (!user) return unauthorizedResponse();
+
     const body = await req.json();
     const { resultado } = body;
 
@@ -55,6 +60,7 @@ export async function POST(req: Request) {
       criadoEm: new Date(),
       atualizadoEm: new Date(),
       textoBruto: resultado.descricao || '',
+      savedByUserId: user.uid,
     };
 
     await docRef.set(novoLead);

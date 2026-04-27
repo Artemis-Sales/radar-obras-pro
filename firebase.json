@@ -1,14 +1,7 @@
 {
   "hosting": {
     "site": "radar-de-obras",
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "us-central1"
-    }
+    "public": "public_disabled",
+    "ignore": ["**"]
   }
 }

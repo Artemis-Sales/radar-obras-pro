@@ -4,14 +4,20 @@
 
 import { NextResponse } from 'next/server';
 import { adminDb, admin } from '@/lib/firebase/admin';
+import { validateRequest, unauthorizedResponse } from '@/lib/auth/validateRequest';
 
 const COLLECTION = 'saved_searches';
 
 // GET — Listar buscas salvas
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    // Auth guard
+    const user = await validateRequest(req);
+    if (!user) return unauthorizedResponse();
+
     const snapshot = await adminDb
       .collection(COLLECTION)
+      .where('userId', '==', user.uid)
       .orderBy('createdAt', 'desc')
       .limit(20)
       .get();
@@ -34,6 +40,10 @@ export async function GET() {
 // POST — Salvar uma nova busca
 export async function POST(req: Request) {
   try {
+    // Auth guard
+    const user = await validateRequest(req);
+    if (!user) return unauthorizedResponse();
+
     const body = await req.json();
     const { query, filters, lastResultCount } = body;
 
@@ -44,10 +54,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // Verificar se já existe uma busca salva com a mesma query
+    // Verificar se já existe uma busca salva com a mesma query para este usuário
     const existing = await adminDb
       .collection(COLLECTION)
       .where('query', '==', query.trim())
+      .where('userId', '==', user.uid)
       .limit(1)
       .get();
 
@@ -65,6 +76,7 @@ export async function POST(req: Request) {
       filters: filters || {},
       lastResultCount: lastResultCount || 0,
       newResultCount: 0,
+      userId: user.uid,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
       lastRunAt: admin.firestore.FieldValue.serverTimestamp(),
     });
@@ -85,6 +97,10 @@ export async function POST(req: Request) {
 // DELETE — Remover busca salva
 export async function DELETE(req: Request) {
   try {
+    // Auth guard
+    const user = await validateRequest(req);
+    if (!user) return unauthorizedResponse();
+
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
 
@@ -92,6 +108,15 @@ export async function DELETE(req: Request) {
       return NextResponse.json(
         { success: false, error: 'ID não informado.' },
         { status: 400 }
+      );
+    }
+
+    // Verify ownership before deleting
+    const doc = await adminDb.collection(COLLECTION).doc(id).get();
+    if (!doc.exists || doc.data()?.userId !== user.uid) {
+      return NextResponse.json(
+        { success: false, error: 'Busca não encontrada.' },
+        { status: 404 }
       );
     }
 

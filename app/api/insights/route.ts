@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { adminDb } from '@/lib/firebase/admin';
+import { validateRequest, unauthorizedResponse } from '@/lib/auth/validateRequest';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    // Auth guard
+    const user = await validateRequest(req);
+    if (!user) return unauthorizedResponse();
+
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json({ success: false, error: 'GEMINI_API_KEY não configurada' }, { status: 500 });
     }
@@ -86,8 +91,9 @@ ${textData}`;
       cached: false
     });
 
-  } catch (error: any) {
-    console.error('Insights API Error:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Insights API Error:', msg);
+    return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }

@@ -12,6 +12,7 @@ import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { searchPNCP } from '@/lib/providers/pncp';
 import { searchLocal } from '@/lib/providers/local';
+import { searchQueridoDiario } from '@/lib/providers/querido-diario';
 import {
   SearchResult,
   SearchFilters,
@@ -19,6 +20,7 @@ import {
   SearchResponse,
   SearchSource,
 } from '@/lib/providers/types';
+import { validateRequest, unauthorizedResponse } from '@/lib/auth/validateRequest';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
@@ -264,6 +266,10 @@ export async function POST(req: Request) {
   const startTime = Date.now();
 
   try {
+    // Auth guard — reject unauthenticated requests
+    const user = await validateRequest(req);
+    if (!user) return unauthorizedResponse();
+
     const body = await req.json();
     const { query, filters: clientFilters } = body as {
       query: string;
@@ -297,7 +303,7 @@ export async function POST(req: Request) {
     };
 
     // 3. Buscar em paralelo em todas as fontes ativas
-    const activeSources = filters.fontes || ['PNCP', 'DOE-SP', 'CETESB'];
+    const activeSources = filters.fontes || ['PNCP', 'DOE-SP', 'CETESB', 'QD'];
 
     const promises: Promise<SearchResult[]>[] = [];
 
@@ -307,6 +313,10 @@ export async function POST(req: Request) {
 
     if (activeSources.includes('DOE-SP') || activeSources.includes('CETESB')) {
       promises.push(searchLocal(intent, filters));
+    }
+
+    if (activeSources.includes('QD')) {
+      promises.push(searchQueridoDiario(intent, filters));
     }
 
     const settled = await Promise.allSettled(promises);
@@ -330,6 +340,7 @@ export async function POST(req: Request) {
       'DOE-SP': 0,
       'CETESB': 0,
       'Places': 0,
+      'QD': 0,
     };
     for (const r of allResults) {
       totalBySource[r.fonte]++;

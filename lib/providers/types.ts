@@ -4,7 +4,7 @@
 // ============================================================
 
 /** Fontes de dados suportadas */
-export type SearchSource = 'PNCP' | 'DOE-SP' | 'CETESB' | 'Places';
+export type SearchSource = 'PNCP' | 'DOE-SP' | 'CETESB' | 'Places' | 'QD';
 
 /** Resultado normalizado retornado por qualquer provedor */
 export interface SearchResult {
@@ -32,6 +32,12 @@ export interface SearchResult {
   numero_controle?: string;
   data_abertura?: string;
   data_encerramento?: string;
+
+  // Campos de enriquecimento CNPJ (BrasilAPI)
+  cnpj?: string;
+  razao_social?: string;
+  porte_empresa?: string;
+  cnae_descricao?: string;
 }
 
 /** Filtros aplicáveis à busca */

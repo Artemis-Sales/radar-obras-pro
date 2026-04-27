@@ -29,6 +29,7 @@ const FONTE_OPTIONS = [
   { value: 'PNCP', label: 'PNCP (Licitações)', color: 'bg-blue-100 text-blue-800 border-blue-200' },
   { value: 'DOE-SP', label: 'DOE-SP (Diário Oficial)', color: 'bg-amber-100 text-amber-800 border-amber-200' },
   { value: 'CETESB', label: 'CETESB (Licenças)', color: 'bg-green-100 text-green-800 border-green-200' },
+  { value: 'QD', label: 'Querido Diário (Municípios)', color: 'bg-violet-100 text-violet-800 border-violet-200' },
 ];
 
 const PERIODO_OPTIONS = [
@@ -58,7 +59,7 @@ export function SearchFilters({
     } else {
       current.push(fonte);
     }
-    updateFilter('fontes', current.length > 0 ? current : ['PNCP', 'DOE-SP', 'CETESB']);
+    updateFilter('fontes', current.length > 0 ? current : ['PNCP', 'DOE-SP', 'CETESB', 'QD']);
   };
 
   const activeFiltersCount = [
@@ -66,7 +67,7 @@ export function SearchFilters({
     filters.valor_min,
     filters.valor_max,
     filters.dias !== 30 ? 'dias' : '',
-    filters.fontes.length < 3 ? 'fontes' : '',
+    filters.fontes.length < 4 ? 'fontes' : '',
   ].filter(Boolean).length;
 
   return (

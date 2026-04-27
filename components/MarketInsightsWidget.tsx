@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Lightbulb, TrendingUp, Sparkles, AlertCircle } from 'lucide-react';
+import { authFetch } from '@/lib/authFetch';
+import { TrendingUp, Sparkles, AlertCircle } from 'lucide-react';
 
 export function MarketInsightsWidget() {
   const [insight, setInsight] = useState<string | null>(null);
@@ -11,7 +12,7 @@ export function MarketInsightsWidget() {
   useEffect(() => {
     async function fetchInsights() {
       try {
-        const res = await fetch('/api/insights');
+        const res = await authFetch('/api/insights');
         const data = await res.json();
         
         if (data.success) {
